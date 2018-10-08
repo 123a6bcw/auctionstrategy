@@ -1,7 +1,7 @@
-# auctionstrategy
+# Auction strategy
 
-План работ:
+How to build:
+TODO
 
-Написать конструктор Player и Seller
-Написать комментарии к коду
-Начать придумывать стратегии
+How to use:
+TODO
