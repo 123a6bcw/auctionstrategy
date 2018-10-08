@@ -1,7 +1,7 @@
 # Auction strategy
 
-How to build:
-TODO
+How to build:  
+TODO  
 
-How to use:
-TODO
+How to use:  
+TODO  
