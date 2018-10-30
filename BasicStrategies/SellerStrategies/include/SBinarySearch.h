@@ -6,7 +6,8 @@ class SBinarySearch : SellerStrategyAbstract {
 private:
     int maxValue;
     int minValue;
+    int currentMove;
 public:
-    SBinarySearch(int _endMove, vector&<pmove> prevMoves): SellerStrategyAbstract(_endMove, prevMoves);
+    SBinarySearch(int _endMove, vector&<pmove> prevMoves);
     int setPrice();
 };

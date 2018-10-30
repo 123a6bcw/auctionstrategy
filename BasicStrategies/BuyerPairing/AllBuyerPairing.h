@@ -2,6 +2,6 @@
 
 namespace Buyer {
 
-#include "./include/BSimple"
+#include "./include/PSimple"
 
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+namespace Buyer {
+
 #include "../BuyerStrategies/AllBuyerStrategies.h"
 #include "./Player.h"
 
@@ -10,3 +12,5 @@ public:
 private:
     int profit;
 };
+
+}

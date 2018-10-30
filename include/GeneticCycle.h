@@ -5,12 +5,14 @@
 #include "../BuyerStrategies/AllBuyerStrategies.h"
 #include "../BuyerStrategies/AllSellerStrategies.h"
 
-class geneticCycle {
+class GeneticCycle {
 public:
-    geneticCycle(int);
+    GeneticCycle(int);
+    constructPlayers();
     void improveStrategies();
+    void cycle();
 private:
     int totalMoves;
     vector<Buyer> buyers;
-    vector<Seller> players;
+    vector<Seller> sellers;
 }
