@@ -1,7 +1,9 @@
-# auctionstrategy
+# Auction strategy
 
-План работ:
+Watch [wiki](https://github.com/123a6bcw/auctionstrategy/wiki) for additional information!
 
-Написать конструктор Player и Seller
-Написать комментарии к коду
-Начать придумывать стратегии
+How to build:  
+TODO  
+
+How to use:  
+TODO  
