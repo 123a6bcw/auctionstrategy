@@ -7,9 +7,8 @@ namespace Seller {
 
 class Seller:Player {
 public:
-        
-private:
-        
+    int setPrice();
+    void addProfit(int);
 }
 
 }

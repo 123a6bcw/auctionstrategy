@@ -7,12 +7,16 @@
 
 class GeneticCycle {
 public:
-    GeneticCycle(int);
-    constructPlayers();
+    GeneticCycle(int, int, int, int, BuyerPairingAbstract&, SellerPairingAbstract&);
     void improveStrategies();
     void cycle();
 private:
-    int totalMoves;
+    int totalSteps;
+    int movesInGame;
+    int howMuchToKill;
     vector<Buyer> buyers;
     vector<Seller> sellers;
+    vector<int> worstPlayers;
+    BuyerPairingAbstract& pairBuyers; 
+    SellerPairingAbstract& pairSellers;
 }

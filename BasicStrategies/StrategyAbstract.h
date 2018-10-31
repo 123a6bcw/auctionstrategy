@@ -1,13 +1,16 @@
 #pragma once
 
-class Strategy {
+class StrategyAbstract {
 public:
-    SellerStrategyAbstract(int _endMove, vector&<Seller::pmove> _previousMoves) : startMove(_previousMoves.size()), endMove(_endMove), previousMoves(_previousMoves), currentMove(_previousMoves.size());
+    StrategyAbstract(int _endMove) : startMove(_previousMoves.size()), endMove(_endMove), previousMoves(nullptr), currentMove(_previousMoves.size());
     virtual void randomParametersChange() = delete;
     
     const int startMove;
     const int endMove;
+    setPreviousMoves(vector<pmove>& _previousMoves) {
+        swap(previousMoves, _previousMoves);
+    }
 protected:
-    vector& <Seller::pmove> previousMoves;
+    vector<pmove>& previousMoves;
     int currentMove;
 }
