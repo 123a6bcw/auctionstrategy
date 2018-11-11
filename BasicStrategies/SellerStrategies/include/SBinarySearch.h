@@ -2,12 +2,12 @@
 
 #include "../SellerStrategyAbstract.h"
 
-class SBinarySearch : SellerStrategyAbstract {
+class SBinarySearch : public SellerStrategyAbstract {
 private:
     int maxValue;
     int minValue;
-    int currentMove;
 public:
-    SBinarySearch(int _endMove, vector&<pmove> prevMoves);
-    int setPrice();
+    SBinarySearch(Player* p, size_t _startMove, size_t _endMove) : SellerStrategyAbstract(p, _startMove, _endMove) {};
+    int setPrice() override;
+    void randomParametersChange() override;
 };

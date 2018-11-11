@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../include/BSimple.h"
 
 bool BSimple::acceptDeal(int price) {
@@ -7,4 +5,4 @@ bool BSimple::acceptDeal(int price) {
 }
 
 void BSimple::randomParametersChange() {
-};
+}

@@ -1,16 +1,17 @@
 #pragma once
 
+#include <vector>
+#include "../Player/include/Player.h"
+#include "./generalStates.h"
+
 class StrategyAbstract {
+    friend class Player;
 public:
-    StrategyAbstract(int _endMove) : startMove(_previousMoves.size()), endMove(_endMove), previousMoves(nullptr), currentMove(_previousMoves.size());
-    virtual void randomParametersChange() = delete;
-    
-    const int startMove;
-    const int endMove;
-    setPreviousMoves(vector<pmove>& _previousMoves) {
-        swap(previousMoves, _previousMoves);
-    }
+    StrategyAbstract(class Player* p, size_t sM, size_t eM) : owner(p), startMove(sM), endMove(eM) {};
+    virtual void randomParametersChange() = 0;
+
 protected:
-    vector<pmove>& previousMoves;
-    int currentMove;
-}
+    Player* owner;
+    size_t startMove;
+    size_t endMove;
+};

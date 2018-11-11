@@ -1,14 +1,12 @@
 #pragma once
 
-namespace Seller {
-
-#include "../SellerStrategies/AllSellerStrategies.h"
+#include "../../BasicStrategies/SellerStrategies/AllSellerStrategies.h"
 #include "./Player.h"
 
-class Seller:Player {
+class Seller : public Player {
 public:
+    Seller() = delete;
+    explicit Seller(size_t);
     int setPrice();
-    void addProfit(int);
-}
-
-}
+    void addProfit(int) override;
+};

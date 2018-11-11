@@ -2,7 +2,9 @@
 
 #include "../BuyerStrategyAbstract.h"
 
-class BSimple:BuyerStrategyAbstract {
+class BSimple : public BuyerStrategyAbstract {
 public:
-     BSimple(int _profit, int _endMove, vector<pmove> _prevMoves) : BuyerStrategyAbstract(_profit, _endMove, _prevMoves) {};
-}
+     BSimple(Player* p, size_t _startMove, size_t _endMove, int _profit) : BuyerStrategyAbstract(p, _startMove, _endMove, _profit) {};
+     bool acceptDeal(int) override;
+     void randomParametersChange() override;
+};

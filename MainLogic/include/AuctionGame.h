@@ -1,14 +1,19 @@
 #pragma once
 
-#include ".../Player/include/Buyer.h"
-#include ".../Player/include/Seller.h"
-#include ".../BasicStrategies/generalStates.h"
+/*
+ * functor that plays game between two players, count their gain and return vector of all moves in game - pair of int price set be seller and bool - was this deal accepted or not
+ */
+
+#include <vector>
+#include "../../Player/include/Buyer.h"
+#include "../../Player/include/Seller.h"
+#include "../../BasicStrategies/generalStates.h"
+
 
 class AuctionGame {
 public:
-    AuctionGame(vector<pmove> t) : allMoves(t) {};
-    void operator () (Buyer&, Seller&, int)
-    vector<pmove> getAllMoves() const;
+    //pmove is defined inside generalStates.h
+    std::vector<pmove> operator () (Buyer*, Seller*, size_t);
 private:
-    vector<pmove> allMoves;
-}
+    std::vector<pmove> allMoves; //vector of all moves in game
+};

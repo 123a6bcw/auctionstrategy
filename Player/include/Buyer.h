@@ -1,17 +1,14 @@
 #pragma once
 
-namespace Buyer {
-
-#include "../BuyerStrategies/AllBuyerStrategies.h"
+#include "../../BasicStrategies/BuyerStrategies/AllBuyerStrategies.h"
 #include "./Player.h"
 
-class Buyer:Player {
+class Buyer : public Player {
 public:
-    Buyer();
+    Buyer() = delete;
+    Buyer(size_t, int);
     bool acceptDeal(int price);
-    void addProfit();
+    void addProfit(int) override;
 private:
     int profit;
 };
-
-}

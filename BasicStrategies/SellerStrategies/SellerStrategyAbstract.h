@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../include/generalStates.h"
-#include "../include/StrategyAbstract.h"
+#include "../generalStates.h"
+#include "../StrategyAbstract.h"
 
-class SellerStrategyAbstract: StrategyAbstract {
+class SellerStrategyAbstract : public StrategyAbstract {
 public:
-    virtual int setPrice() = delete;
+    SellerStrategyAbstract(Player* p, size_t _startMove, size_t _endMove) : StrategyAbstract(p, _startMove, _endMove) {};
+    virtual int setPrice() = 0;
 };

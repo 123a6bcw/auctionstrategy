@@ -1,7 +1,4 @@
 #pragma once
 
-namespace Buyer {
+#include "./include/BSimple.h"
 
-#include "./include/BSimple"
-
-}
