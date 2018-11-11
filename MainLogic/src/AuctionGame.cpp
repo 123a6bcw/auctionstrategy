@@ -17,8 +17,8 @@ std::vector<pmove> AuctionGame :: operator () (Buyer* buyer, Seller* seller, siz
         allMoves.emplace_back(price, result);
         
         if (result) {
-            seller -> addProfit(price);
-            buyer -> addProfit(price);
+            seller -> addGain(price);
+            buyer -> addGain(price);
         }
     }
 

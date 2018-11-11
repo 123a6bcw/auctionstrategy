@@ -22,7 +22,7 @@ GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size
  */
 void GeneticCycle::clearProfit(std::vector<Player*>& players) {
     for (auto x : players) {
-        x -> clearProfit();
+        x -> clearGain();
     }
 }
 
@@ -34,7 +34,7 @@ void GeneticCycle::destroyWorstPlayers(std::vector<Player*>& players) {
         throw std::runtime_error("You asked to kill too many players - should be no more than amount of players - 1");
     }
 
-    sort(players.begin(), players.end(), Player::byProfit()); //sorted by amount of money they won. Descending
+    sort(players.begin(), players.end(), Player::byGain()); //sorted by amount of money they won. Descending
     players.resize(players.size() - howMuchToKill);
 
     //TODO handle memory leak
@@ -44,7 +44,7 @@ void GeneticCycle::destroyWorstPlayers(std::vector<Player*>& players) {
  * main cycle
  */
 void GeneticCycle :: runCycle() {
-    for (size_t t = 1; t <= totalSteps; t++) {
+    for (size_t t = 0; t < totalSteps; t++) {
         clearProfit(buyers); //clear amount of money they won
         clearProfit(sellers);
 

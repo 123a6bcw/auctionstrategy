@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+ * abstract functor that creates childs in population. Derived functors should realise operator () with some specific strategy for pairing.
+ */
+
 #include <vector>
 #include "../../Player/include/Buyer.h"
 
