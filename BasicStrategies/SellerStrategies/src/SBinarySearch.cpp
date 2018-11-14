@@ -5,7 +5,12 @@
  * Proposes deal with the average value and change minValue and maxValue accordingly to the result of the deal.
 */
 
-SBinarySearch::SBinarySearch(Player* p, size_t _startMove, size_t _endMove) : SellerStrategyAbstract(p, _startMove, _endMove), inputMaxValue(1000), inputMinValue(0)  {
+#include <iostream>
+
+SBinarySearch::SBinarySearch(Player* p, size_t _startMove, size_t _endMove) : SellerStrategyAbstract(p, _startMove, _endMove) {
+    inputMaxValue = rand() % 1000 + 5;
+    inputMinValue = rand() % (inputMaxValue - 1);
+    std::cout << inputMaxValue << " " << inputMinValue << std::endl;
     //TODO bad way to assume inputMinValue and inputMaxValue
 }
 

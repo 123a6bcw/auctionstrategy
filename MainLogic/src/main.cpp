@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     size_t numberOfBuyers = 5; //static_cast<size_t>(std::stoul(argv[1]))
     size_t totalSteps = 10; //static_cast<size_t>(std::stoul(argv[2]))
     size_t movesInGame = 10; //static_cast<size_t>(std::stoul(argv[3]))
-    size_t howMuchToKill = 10; //static_cast<size_t>(std::stoul(argv[4]))
+    size_t howMuchToKill = 2; //static_cast<size_t>(std::stoul(argv[4]))
     PairingAbstract* pairSellers = static_cast<PairingAbstract*>(new PSimple()); // argv[5]
     PairingAbstract* pairBuyers = new PSimple(); // argv[6]
     std::string logFile = "log.txt"; //argv[7]

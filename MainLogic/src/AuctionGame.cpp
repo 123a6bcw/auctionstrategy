@@ -5,7 +5,7 @@
  * pmove is defined inside generalStates.h
  */
 
-std::vector<pmove> AuctionGame :: operator () (Buyer* buyer, Seller* seller, size_t totalMoves) {
+std::vector<pmove> AuctionGame :: operator () (Seller* seller, Buyer* buyer, size_t totalMoves) {
     allMoves.clear();
     buyer -> newGame(&allMoves); // Assigns fields such as current move.
                                  // Also each player should have a link to vector with results of previous moves, because their strategies (may) depend on it

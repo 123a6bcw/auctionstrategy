@@ -11,7 +11,7 @@ void BSimple::reset() {
 }
 
 bool BSimple::acceptDeal(int price) {
-    return price > profit;
+    return price < profit;
 }
 
 StrategyAbstract* BSimple::copy(Player* player) const {

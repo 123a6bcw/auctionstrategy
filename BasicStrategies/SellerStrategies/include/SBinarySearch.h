@@ -9,8 +9,8 @@
 
 class SBinarySearch : public SellerStrategyAbstract {
 private:
-    const int inputMaxValue; //assumed maximum possible profit of buyer
-    const int inputMinValue; //minimum
+    int inputMaxValue; //assumed maximum possible profit of buyer
+    int inputMinValue; //minimum
     int currentMaxValue; //calculated (assumed) possible profit of buyer
     int currentMinValue; //minimum
     explicit SBinarySearch(const SBinarySearch*);

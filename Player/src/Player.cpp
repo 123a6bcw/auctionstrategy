@@ -10,13 +10,18 @@ Player::Player(const Player* p) : movesInGame(p -> movesInGame) {}
  * increment currentMove and change currentStrategy accordingly
  */
 void Player::shiftMove() {
-    currentMove++;
-    if (currentMove > getCurrentStrategy() -> endMove) {
+    if (currentMove + 1 >= movesInGame) {
+        currentMove++;
+        return;
+    }
+
+    if (currentMove++ == getCurrentStrategy() -> endMove) { //getCurrentStrategy() uses currentMove!!!
         currentStrategy++;
-        if (currentMove < movesInGame && currentStrategy >= strategies.size()) {
+        if (currentStrategy >= strategies.size()) {
             throw std::runtime_error("shiftMove() : Player has run out of strategies to use.");
         }
-        getCurrentStrategy() -> reset(); //each strategy may calculate some parameters during it's usage, so we need to reset them before using for the first time.
+        getCurrentStrategy() -> reset(); //each strategy may calculate some parameters during it's usage, or by results of previous moves in game
+                                           // so we need to reset them before using for the first time.
     }
 }
 
@@ -34,6 +39,8 @@ void Player::newGame(std::vector<pmove>* _previousMoves) {
     setPreviousMoves(_previousMoves);
     currentMove = 0;
     currentStrategy = 0;
+    getCurrentStrategy() -> reset(); //in shiftMove we don't reset() the very first strategy. We can't reset all strategies here, because reset() may use results of previous moves,
+                                        // calculating during playing the game
 }
 
 /*

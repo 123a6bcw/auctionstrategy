@@ -9,12 +9,19 @@
 
 GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size_t _totalSteps, size_t _movesInGame, size_t _howMuchToKill, class PairingAbstract& pb, PairingAbstract& ps, std::string of) :
     totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill) , pairBuyers(pb), pairSellers(ps), game(AuctionGame()), stats(StatisticCounter(std::move(of))) {
-        sellers = std::vector<Player*>(numberOfSellers, new Seller(movesInGame));
+        sellers = std::vector<Player*>(0);
+        for (size_t i = 0; i < numberOfSellers; i++) {
+            sellers.push_back(new Seller(movesInGame));
+        }
 
         /*
          * TODO last parameter in Buyer is his inside profit. It's bad working version, SHOULD be changed later.
          */
-        buyers = std::vector<Player*>(numberOfBuyers, new Buyer(movesInGame, rand() % 1000));
+
+        buyers = std::vector<Player*>(0);
+        for (size_t i = 0; i < numberOfBuyers; i++) {
+            buyers.push_back(new Buyer(movesInGame, rand() % 1000)); //
+        }
 }
 
 /*
@@ -45,26 +52,28 @@ void GeneticCycle::destroyWorstPlayers(std::vector<Player*>& players) {
  */
 void GeneticCycle :: runCycle() {
     for (size_t t = 0; t < totalSteps; t++) {
-        clearProfit(buyers); //clear amount of money they won
-        clearProfit(sellers);
+        clearProfit(sellers); //clear amount of money they won
+        clearProfit(buyers);
 
-        for (auto x : buyers) {
-            stats.gather(dynamic_cast<Buyer*>(x));
+        stats.newStep(t);
+
+        for (auto s = sellers.begin(); s != sellers.end(); s++) {
+            stats.gather(static_cast<size_t>(s - sellers.begin()), dynamic_cast<Seller*>(*s));
             //There is base class Player with derived classes Buyer and Seller, vector buyers stores Player*, but in fact they all are class Buyer, so we can (have to) use dynamic_cast<>
             //here stats gathering info about which strategies each player uses.
         }
 
-        for (auto y : sellers) {
-            stats.gather(dynamic_cast<Seller*>(y));
+        for (auto b = buyers.begin(); b != buyers.end(); b++) {
+            stats.gather(static_cast<size_t>(b - buyers.begin()), dynamic_cast<Buyer*>(*b));
         }
 
-        for (auto x : buyers) {
-            for (auto y : sellers) {
+        for (auto s = sellers.begin(); s != sellers.end(); s++) {
+            for (auto b = buyers.begin(); b != buyers.end(); b++) {
                 // game is functor that plays game between two players and return vector of moves in this game --- pair of int price sets by Seller and bool that shows if deal was accepted
                 // (also count how much money each player got)
                 // then statistic are gathering.
-               const std::vector<pmove> moves = game(dynamic_cast<Buyer*>(x), dynamic_cast<Seller*>(y), movesInGame);
-               stats.gather(moves);
+                const std::vector<pmove> moves = game(dynamic_cast<Seller*>(*s), dynamic_cast<Buyer*>(*b), movesInGame);
+                stats.gather(static_cast<size_t>(s - sellers.begin()), static_cast<size_t>(b - buyers.begin()), moves);
             }
         }
 
