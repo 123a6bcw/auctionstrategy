@@ -4,8 +4,8 @@
  * abstract class for strategy of seller. Each derived class should just implement virtual function setPrice() --- propose a deal to Buyer.
  */
 
-#include "../generalStates.h"
 #include "../StrategyAbstract.h"
+#include "../generalStates.h"
 
 class SellerStrategyAbstract : public StrategyAbstract {
 public:

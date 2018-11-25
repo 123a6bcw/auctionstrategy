@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<BorderPane fx:controller="AuctionStrategyGUI.CycleController"
+          xmlns:fx="http://javafx.com/fxml">
+    <top>
+      <ToolBar>
+        <Button fx:id="getBack" onAction="#getOnWelcomeScreen" text="Back to main menu"/>
+      </ToolBar>
+    </top>
+
+    <center>
+        <GridPane fx:id="gridPane" hgap="10" vgap="10">
+            <Label text="Please specify parameters of the cycle" GridPane.rowIndex="0" styleClass="heading" minWidth="-Infinity" />
+
+            <Label text="Number of sellers in cycle" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="inCycle" onMouseMoved="#showNumberOfSellersInfo" />
+             <TextField fx:id="numberOfSellers" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Separator GridPane.rowIndex="2" />
+
+            <Label text="Number of buyers in cycle" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="inCycle" onMouseMoved="#showNumberOfBuyersInfo" />
+             <TextField fx:id="numberOfBuyers" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            <Separator GridPane.rowIndex="4" />
+
+            <Label text="Number of steps in cycle" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="inCycle" onMouseMoved="#showTotalStepsInfo" />
+            <TextField fx:id="totalSteps" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+            <Separator GridPane.rowIndex="6" />
+
+            <Label text="Number of moves in one game" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="inCycle" onMouseMoved="#MovesInGame" />
+            <TextField fx:id="movesInGame" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+            <Separator GridPane.rowIndex="8" />
+
+            <Label text="Number of players dying" GridPane.columnIndex="0" GridPane.rowIndex="9" styleClass="inCycle" onMouseMoved="#showHowMuchToKillInfo" />
+            <TextField fx:id="howMuchToKill" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+            <Separator GridPane.rowIndex="10" />
+
+            <Label text="Seller pairing function" GridPane.columnIndex="0" GridPane.rowIndex="11" styleClass="inCycle" onMouseMoved="#showPairSellersInfo" />
+            <TextField fx:id="pairSellers" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+            <Separator GridPane.rowIndex="12" />
+
+            <Label text="Buyer pairing function" GridPane.columnIndex="0" GridPane.rowIndex="13" styleClass="inCycle" onMouseMoved="#showPairBuyersInfo" />
+            <TextField fx:id="pairBuyers" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+            <Separator GridPane.rowIndex="14" />
+
+            <Label text="Name of log file" GridPane.columnIndex="0" GridPane.rowIndex="15" styleClass="inCycle" onMouseMoved="#showLogFileInfo" />
+            <TextField fx:id="logFile" GridPane.rowIndex="15" GridPane.columnIndex="1" />
+            <Separator GridPane.rowIndex="16" />
+
+            <Button fx:id="runCycle" text="Run cycle!" GridPane.rowIndex="18" onMouseClicked="#runCycle" />
+            <Label fx:id="errorLog" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="18" styleClass="verySmall" wrapText="true" minWidth="-Infinity" />
+        </GridPane>
+    </center>
+
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
+</BorderPane>

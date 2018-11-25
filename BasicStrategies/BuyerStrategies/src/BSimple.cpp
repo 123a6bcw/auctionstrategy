@@ -1,4 +1,5 @@
 #include "../include/BSimple.h"
+#include "../../../Player/include/Player.h"
 
 /*
  * simplest strategy for buyer. Accepts deal if his gain isn't negative.
@@ -22,4 +23,8 @@ StrategyAbstract* BSimple::copy(Player* player) const {
 
 void BSimple::randomParametersChange() {
   // strategy does not have any parameters to change
+}
+
+BSimple::~BSimple() {
+
 }

@@ -1,10 +1,30 @@
 #include "../include/Player.h"
-
 /*
  * Base class with derived classes Buyer and Seller. Operates with vector of strategies
  */
 
-Player::Player(const Player* p) : movesInGame(p -> movesInGame) {}
+Player::Player(const Player* p) : randomNumberGenerator(p -> randomNumberGenerator), movesInGame(p -> movesInGame),  controller(p -> controller) {}
+
+Player::Player(size_t mIG, int profit, RandomNumberGenerator* rng, StrategiesController* _controller, typeOfPlayer _type) :
+                                                                    randomNumberGenerator(rng), movesInGame(mIG), controller(_controller), type(_type)  {
+    //does not initialise fields that always should initialise at the start of each game from class AuctionGame.
+    strategies = new std::vector<StrategyAbstract*>(0);
+    auto movesLeft = movesInGame;
+    size_t moveOfStrategy = 0;
+    size_t numberOfLastStrategy = 0;
+    while (movesLeft > 0) {
+        size_t movesInStrategy = randomNumberGenerator -> getRandomNumber(static_cast<size_t>(1), movesLeft);
+        size_t numberOfStrategy = randomNumberGenerator -> getRandomNumber(static_cast<size_t>(1), controller -> getAmmountOfStrategies(type));
+        /* TODO uncomment this when there will be more than one strategy implemented
+        while (numberOfLastStrategy == numberOfStrategy) {
+            numberOfStrategy = controller -> getRandomInt(static_cast<size_t>(1), controller -> getAmmountOfStrategies());
+        }*/
+        numberOfLastStrategy = numberOfStrategy;
+        movesLeft -= movesInStrategy;
+        strategies->push_back(controller -> createStrategy(numberOfStrategy, this, moveOfStrategy, moveOfStrategy + movesInStrategy - 1, profit, type));
+        moveOfStrategy += movesInStrategy;
+    }
+}
 
 /*
  * increment currentMove and change currentStrategy accordingly
@@ -17,7 +37,7 @@ void Player::shiftMove() {
 
     if (currentMove++ == getCurrentStrategy() -> endMove) { //getCurrentStrategy() uses currentMove!!!
         currentStrategy++;
-        if (currentStrategy >= strategies.size()) {
+        if (currentStrategy >= strategies->size()) {
             throw std::runtime_error("shiftMove() : Player has run out of strategies to use.");
         }
         getCurrentStrategy() -> reset(); //each strategy may calculate some parameters during it's usage, or by results of previous moves in game
@@ -57,10 +77,10 @@ void Player::clearGain() {
     totalGain = 0;
 }
 
-std::vector<StrategyAbstract*> Player::copyStrategies(Player* newPlayer) const {
-    std::vector<StrategyAbstract*> copied;
-    for (auto x : strategies) {
-        copied.push_back(x -> copy(newPlayer));
+std::vector<StrategyAbstract*>* Player::copyStrategies(Player* newPlayer) const {
+    std::vector<StrategyAbstract*>* copied = new std::vector<StrategyAbstract*>(0);
+    for (auto x : *strategies) {
+        copied -> push_back(x -> copy(newPlayer));
     }
 
     return copied;
@@ -70,20 +90,29 @@ std::vector<StrategyAbstract*> Player::copyStrategies(Player* newPlayer) const {
 /*
  * Find players with highest gain. Changes (sorts) given vector of players (their order is not important so that's ok).
  */
-std::vector<Player*> Player::findBestPlayers(size_t numberOfPlayers, std::vector<Player*>& players) {
-    if (players.empty()) {
+std::vector<Player*> Player::findBestPlayers(size_t numberOfPlayers, std::vector<Player*>* players) {
+    if (players -> empty()) {
         throw std::runtime_error("findBestPlayers() : empty vector of players");
     }
-    if (numberOfPlayers > players.size()) {
+    if (numberOfPlayers > players -> size()) {
         throw std::runtime_error("findBestPlayers() : number of players to find is larger than amount of players");
     }
 
-    sort(players.begin(), players.end(), byGain());
+    sort(players -> begin(), players -> end(), byGain());
     std::vector<Player*> bestPlayers;
 
-    for (size_t i = players.size() - 1; numberOfPlayers > 0; --numberOfPlayers, --i ) {
-        bestPlayers.push_back(players[i]);
+    for (size_t i = players -> size() - 1; numberOfPlayers > 0; --numberOfPlayers, --i ) {
+        bestPlayers.push_back((*players)[i]);
     }
 
     return bestPlayers;
+}
+
+Player::~Player () {
+    for (auto x : *strategies) {
+        delete x;
+    }
+    delete strategies;
+
+    //All other fields exists inside Genetic Cycle hence should not be deleted
 }

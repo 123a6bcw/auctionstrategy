@@ -13,6 +13,7 @@ public:
      void randomParametersChange() override;
      void reset() override;
      StrategyAbstract* copy(Player*) const override;
+     ~BSimple() override;
 private:
      explicit BSimple(const BSimple*);
 };

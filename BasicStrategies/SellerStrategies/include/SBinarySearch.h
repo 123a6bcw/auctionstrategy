@@ -19,5 +19,6 @@ public:
     int setPrice() override; //for comments on overrided functions see AbstractStrategy and SellerAbstractStrategy
     void reset() override;
     void randomParametersChange() override;
+    ~SBinarySearch() override;
     StrategyAbstract* copy(Player*) const override;
 };

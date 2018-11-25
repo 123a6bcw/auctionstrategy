@@ -4,3 +4,6 @@ CMakeLists
 build/*
 !build/build.sh
 !build/CMakeLists.txt
+GUI/*
+!GUI/src
+logs/*

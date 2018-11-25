@@ -9,5 +9,6 @@
 
 class PairingAbstract {
 public:
-    virtual void operator () (size_t, std::vector<Player*>&) = 0;
+    virtual void operator () (size_t, std::vector<Player*>*) = 0;
+    virtual ~PairingAbstract() = default;
 };

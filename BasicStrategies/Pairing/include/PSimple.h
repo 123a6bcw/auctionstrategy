@@ -8,5 +8,6 @@
 
 class PSimple : public PairingAbstract {
 public:
-    void operator () (size_t, std::vector<Player*>&) override;
+    void operator () (size_t, std::vector<Player*>*) override;
+    ~PSimple() override = default;
 };

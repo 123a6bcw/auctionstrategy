@@ -6,12 +6,12 @@
 */
 
 #include <iostream>
+#include "../../../Player/include/Player.h"
 
 SBinarySearch::SBinarySearch(Player* p, size_t _startMove, size_t _endMove) : SellerStrategyAbstract(p, _startMove, _endMove) {
-    inputMaxValue = rand() % 1000 + 5;
-    inputMinValue = rand() % (inputMaxValue - 1);
-    std::cout << inputMaxValue << " " << inputMinValue << std::endl;
-    //TODO bad way to assume inputMinValue and inputMaxValue
+    inputMaxValue = p -> randomNumberGenerator -> getRandomNumber(5, 1000);
+    inputMinValue = p -> randomNumberGenerator -> getRandomNumber(0, inputMaxValue - 2);
+    // TODO change assigning of input values?
 }
 
 SBinarySearch::SBinarySearch(const SBinarySearch* sbs) : SellerStrategyAbstract(sbs),inputMaxValue(sbs -> inputMaxValue), inputMinValue(sbs -> inputMinValue) {}
@@ -44,4 +44,8 @@ int SBinarySearch :: setPrice() {
 
 void SBinarySearch::randomParametersChange() {
     // TODO
+}
+
+SBinarySearch::~SBinarySearch() {
+
 }

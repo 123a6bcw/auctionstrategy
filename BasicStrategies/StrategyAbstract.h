@@ -5,8 +5,9 @@
  */
 
 #include <vector>
-#include "../Player/include/Player.h"
 #include "./generalStates.h"
+
+class Player;
 
 class StrategyAbstract {
     friend class Player;
@@ -16,6 +17,7 @@ public:
     virtual void randomParametersChange() = 0; // slightly randomly changes parameters of strategy in order of improving genetic cycle.
     virtual void reset() = 0; // each strategy may calculate some additional parameters during it's usage. This resetting this parameters when strategy using in game for the first time.
     virtual StrategyAbstract* copy(Player*) const = 0; //creates copy of this strategy with new owner
+    virtual ~StrategyAbstract() = default;
 protected:
     Player* owner; /* Player who uses this strategy. For now only uses his vector of previous moves cause strategy (may) depend on it.
                    * vector of previous moves does not throws to each strategy in order of optimization --- otherwise we had to initialise it at the beggining of each game for each strategy.

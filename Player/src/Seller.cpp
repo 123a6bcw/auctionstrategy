@@ -1,4 +1,5 @@
 #include "../include/Seller.h"
+#include <algorithm>
 
 /*
  * Player who sets price and proposes deal to buyer
@@ -6,11 +7,8 @@
 
 Seller::Seller(const Seller* s) : Player(s) {}
 
-Seller::Seller(size_t mIG) : Player(mIG) {
+Seller::Seller(size_t _movesInGame, RandomNumberGenerator* rng, StrategiesController* ctrl) : Player(_movesInGame, -1, rng, ctrl, SELLER) {
     totalGain = 0;
-    strategies = std::vector<StrategyAbstract*>(0);
-    //TODO for now plays only with one simple strategy
-    strategies.push_back(new SBinarySearch(this, 0, movesInGame - 1));
 }
 
 /*
@@ -38,3 +36,5 @@ Player* Seller::copy() const {
 void Seller::addGain(int price) {
     totalGain += price;
 }
+
+Seller::~Seller() = default;

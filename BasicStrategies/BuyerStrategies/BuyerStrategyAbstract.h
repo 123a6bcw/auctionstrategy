@@ -4,8 +4,8 @@
  * abstract class for Buyer's strategies. Each derived class should just implement virtual function acceptDeal() (aside of function demanding from AbstractStrategy)
  */
 
-#include "../generalStates.h"
 #include "../StrategyAbstract.h"
+#include "../generalStates.h"
 
 class BuyerStrategyAbstract: public StrategyAbstract {
 public:

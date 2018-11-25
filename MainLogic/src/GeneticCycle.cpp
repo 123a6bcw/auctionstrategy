@@ -1,4 +1,5 @@
 #include "../include/GeneticCycle.h"
+#include "../include/StrategiesController.h"
 
 /*
  * Main class of the project. There is sellers and buyers, each have genome - set of strategies (with parameters) implemented in BasicStrategies,
@@ -7,20 +8,20 @@
  * childs in population, and string --- name of log file.
 */
 
-GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size_t _totalSteps, size_t _movesInGame, size_t _howMuchToKill, class PairingAbstract& pb, PairingAbstract& ps, std::string of) :
-    totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill) , pairBuyers(pb), pairSellers(ps), game(AuctionGame()), stats(StatisticCounter(std::move(of))) {
+GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size_t _totalSteps, size_t _movesInGame, size_t _howMuchToKill, size_t numberOfBuyerPairing, size_t numberOfSellerPairing, std::string of) :
+    totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill) , game(AuctionGame()), stats(std::move(of)), randomNumberGenerator(67) {
+        pairBuyers  = controller . createPairing(numberOfBuyerPairing, BUYER);
+        pairSellers = controller . createPairing(numberOfSellerPairing, SELLER);
+
         sellers = std::vector<Player*>(0);
         for (size_t i = 0; i < numberOfSellers; i++) {
-            sellers.push_back(new Seller(movesInGame));
+            sellers.push_back(new Seller(_movesInGame, &randomNumberGenerator, &controller));
         }
-
-        /*
-         * TODO last parameter in Buyer is his inside profit. It's bad working version, SHOULD be changed later.
-         */
 
         buyers = std::vector<Player*>(0);
         for (size_t i = 0; i < numberOfBuyers; i++) {
-            buyers.push_back(new Buyer(movesInGame, rand() % 1000)); //
+            buyers.push_back(new Buyer(_movesInGame, randomNumberGenerator . getRandomInt() % 1000, &randomNumberGenerator, &controller));
+              //TODO random parameter is buyer's inside profit. Is this OK to just make it random?
         }
 }
 
@@ -42,9 +43,10 @@ void GeneticCycle::destroyWorstPlayers(std::vector<Player*>& players) {
     }
 
     sort(players.begin(), players.end(), Player::byGain()); //sorted by amount of money they won. Descending
+    for (size_t i = players.size() - howMuchToKill; i < players.size(); i++) {
+        delete players[i];
+    }
     players.resize(players.size() - howMuchToKill);
-
-    //TODO handle memory leak
 }
 
 /*
@@ -72,7 +74,7 @@ void GeneticCycle :: runCycle() {
                 // game is functor that plays game between two players and return vector of moves in this game --- pair of int price sets by Seller and bool that shows if deal was accepted
                 // (also count how much money each player got)
                 // then statistic are gathering.
-                const std::vector<pmove> moves = game(dynamic_cast<Seller*>(*s), dynamic_cast<Buyer*>(*b), movesInGame);
+                const std::vector<pmove>* moves = game(dynamic_cast<Seller*>(*s), dynamic_cast<Buyer*>(*b), movesInGame);
                 stats.gather(static_cast<size_t>(s - sellers.begin()), static_cast<size_t>(b - buyers.begin()), moves);
             }
         }
@@ -80,7 +82,21 @@ void GeneticCycle :: runCycle() {
         destroyWorstPlayers(buyers);
         destroyWorstPlayers(sellers);
 
-        pairBuyers(howMuchToKill, buyers); //appends child in quantity of how much was just killed
-        pairSellers(howMuchToKill, sellers);
+        (*pairBuyers)(howMuchToKill, &buyers); //appends child in quantity of how much was just killed
+        (*pairSellers)(howMuchToKill, &sellers);
     }
+}
+
+//TODO destructor
+GeneticCycle::~GeneticCycle() {
+    for (auto x : buyers) {
+        delete x;
+    }
+
+    for (auto y : sellers) {
+        delete y;
+    }
+
+    delete pairBuyers;
+    delete pairSellers;
 }
