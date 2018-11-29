@@ -5,6 +5,7 @@
  */
 
 #include <cstring>
+#include <iostream>
 #include <fstream>
 #include "../../Player/include/Buyer.h"
 #include "../../Player/include/Seller.h"
@@ -20,5 +21,4 @@ public:
     ~StatisticCounter();
 private:
     std::fstream out; //file there info is being writing to
-    std::fstream status;
 };

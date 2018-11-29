@@ -10,12 +10,6 @@ StatisticCounter::StatisticCounter(std::string s) {
     if (!out.is_open()) {
         throw std::runtime_error("can't open log file");
     }
-
-    status = std::fstream();
-    status.open("status.txt", std::fstream::out);
-    if (!status.is_open()) {
-        throw std::runtime_error("can't open status file");
-    }
 }
 
 /*
@@ -30,8 +24,8 @@ void StatisticCounter::gather(size_t number, const Seller* seller) {
 }
 
 void StatisticCounter::newStep(size_t i) {
-    out << "CS: " << i << "\n";
-    status << i << std::endl;
+    out << "CS " << i << "\n";
+    std::cout << i << "\n";
 }
 
 /*

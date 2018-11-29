@@ -6,4 +6,5 @@ build/*
 !build/CMakeLists.txt
 GUI/*
 !GUI/src
+!GUI/out/artifacts/GUI/
 logs/*
