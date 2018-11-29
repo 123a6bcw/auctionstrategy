@@ -12,3 +12,4 @@ GUI/*
 !GUI.jar
 !GUI.jnlp
 logs/*
+!logs
