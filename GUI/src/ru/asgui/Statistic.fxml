@@ -28,6 +28,7 @@
         <ScrollPane>
             <Label fx:id="statisticLabel" styleClass="verySmall" wrapText="true" />
         </ScrollPane>
+
     </center>
 
     <stylesheets>

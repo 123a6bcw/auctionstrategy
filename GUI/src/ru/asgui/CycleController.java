@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
@@ -17,6 +18,14 @@ import javafx.util.Pair;
 import java.io.*;
 
 public class CycleController {
+    @FXML public Label numberOfSellersLabel;
+    @FXML public Label numberOfBuyersLabel;
+    @FXML public Label numberOfStepsLabel;
+    @FXML public Label numberOfMovesLabel;
+    @FXML public Label numberOfPlayersDyingLabel;
+    @FXML public Label numberOfSellerPairingLabel;
+    @FXML public Label numberOfBuyerPairingLabel;
+    @FXML public Label nameOfLogFileLabel;
     @FXML private Button getBack;
     @FXML private Button runCycle;
     @FXML private TextField numberOfSellers;
@@ -56,8 +65,17 @@ public class CycleController {
         gridPane.getRowConstraints().add(new RowConstraints(5));
         gridPane.getRowConstraints().add(new RowConstraints(5));
         gridPane.getRowConstraints().add(new RowConstraints());
-        header.setText("Please specify parameters of the cycle");
+        header.setText("Please specify parameters of the cycle\nMove Mouse on label to see the tooltip");
         basicSettings.fire();
+
+        numberOfSellersLabel.setTooltip(new Tooltip("How many sellers exists on each step of cycle\nDon't forget, that program works in (number of players) * (number of cycle steps) * (number of moves in game)"));
+        numberOfBuyersLabel.setTooltip(new Tooltip("How many buyers exists on each step of cycle"));
+        numberOfStepsLabel.setTooltip(new Tooltip("Each step is game between each players and genetic transformation"));
+        numberOfMovesLabel.setTooltip(new Tooltip("Number of moves in every game between two players"));
+        numberOfPlayersDyingLabel.setTooltip(new Tooltip("On each step of cycle worst players are dying"));
+        numberOfSellerPairingLabel.setTooltip(new Tooltip("Don't change. Only single Pairing function implemented"));
+        numberOfBuyerPairingLabel.setTooltip(new Tooltip("Don't change. Only single Pairing function implemented"));
+        nameOfLogFileLabel.setTooltip(new Tooltip("Don't be scared of conflicting names - current time will be append to the name"));
     }
 
     @FXML
@@ -122,7 +140,7 @@ public class CycleController {
 
             errorLog.setText("Cycle " + currentCycle +  " finished with error:\n" + sb);
         } else {
-            errorLog.setText("Cycle " + currentCycle + " successfully ended.\nYour results has been put into\nlog/" + logFileExtended);
+            errorLog.setText("Cycle " + currentCycle + " successfully ended.\nYour results has been put into\nlogs/" + logFileExtended);
         }
 
         currentCycle++;
