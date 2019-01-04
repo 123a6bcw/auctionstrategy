@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
         numberOfBuyers = 10;
         totalSteps = 10;
         movesInGame = 10;
-        howMuchToKill = 5;
+        howMuchToKill = 2;
         pairSellers = 1;
         pairBuyers = 1;
         logFile = "debugLog.txt";
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
         logFile = argv[8];
     }
     try {
-        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile).runCycle();
+        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile, 10).runCycle();
     }
     catch (std::runtime_error& e) {
         std::cerr << e.what() << std::endl;

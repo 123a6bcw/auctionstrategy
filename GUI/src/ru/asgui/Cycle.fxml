@@ -22,6 +22,7 @@
             <HBox GridPane.rowIndex="1" spacing="10" minWidth="Infinity">
               <Button fx:id="basicSettings" text="set basic parameters" onAction="#setBasicSettings" HBox.hgrow="ALWAYS" />
               <Button fx:id="largeSettings" text="large parameters"     onAction="#setLargeSettings" HBox.hgrow="ALWAYS" />
+              <Button text="extra large parameters"     onAction="#setExtraLargeSettings" HBox.hgrow="ALWAYS" />
             </HBox>
 
             <Label fx:id="numberOfSellersLabel" text="Number of sellers in cycle" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="inCycle" onMouseMoved="#showNumberOfSellersInfo" />

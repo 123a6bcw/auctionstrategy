@@ -13,7 +13,5 @@
 class AuctionGame {
 public:
     //pmove is defined inside generalStates.h
-    std::vector<pmove>* operator () (Seller*, Buyer*, size_t);
-private:
-    std::vector<pmove> allMoves; //vector of all moves in game
+     void operator () (Player*, Player*, size_t, std::vector<pmove>* allMoves);
 };

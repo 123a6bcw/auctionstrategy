@@ -1,0 +1,19 @@
+.root {
+    -fx-font-size: 14px;
+}
+
+.label {
+    -fx-font-size: 36px;
+}
+
+.heading {
+    -fx-font-size: 30px;
+}
+
+.inCycle {
+    -fx-font-size: 16px;
+}
+
+.verySmall {
+    -fx-font-size: 16px;
+}

@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <thread>
 #include "../../BasicStrategies/generalStates.h"
 #include "../../Player/include/Buyer.h"
 #include "../../Player/include/Seller.h"
@@ -20,7 +21,7 @@
 
 class GeneticCycle {
 public:
-    GeneticCycle(size_t, size_t, size_t, size_t, size_t, size_t, size_t, std::string);
+    GeneticCycle(size_t, size_t, size_t, size_t, size_t, size_t, size_t, std::string, size_t);
     void runCycle(); //main cycle
     ~GeneticCycle();
 private:
@@ -32,11 +33,16 @@ private:
     //std::vector<size_t> worstPlayers; // It's never used?? set of players with the worst result on each step.
     PairingAbstract* pairBuyers; // PairingAbstract is abstract class, which has derived classes that implements special function for creating childs in population of players
     PairingAbstract* pairSellers;
-    class AuctionGame game; // functor, takes Buyer and Seller, returns vector of moves in game between them
-    class StatisticCounter stats; // class for gathering statistic of game
-
     void clearProfit(std::vector<Player*>&); // clears amount of money each player won on the step of the cycle
     void destroyWorstPlayers(std::vector<Player*>& players); // destroying players with the worst result on each step of the cycle
     StrategiesController controller;
     RandomNumberGenerator randomNumberGenerator;
+
+    const size_t ptrNumber;
+    std::vector< std::pair<size_t, size_t> > buyersParts;
+    std::vector< std::pair<size_t, size_t> > sellersParts;
+    void runPartedCycle(size_t, size_t);
+    void createPartition(size_t, size_t, std::vector<std::pair<size_t, size_t>>*);
+    std::vector<std::vector<std::vector<pmove>>> moves;
+    class StatisticCounter stats; // class for gathering statistic of game
 };

@@ -31,7 +31,7 @@ public class StatisticController {
         runCycle.getScene().setRoot(FXMLLoader.load(getClass().getResource("Cycle.fxml")));
     }
 
-    public void getFile() {
+    public void getFile() throws Exception {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open log file");
         fileChooser.setInitialDirectory(new File(GuiMain.findFile("logs")));
@@ -40,7 +40,7 @@ public class StatisticController {
 
 
     @FXML
-    public void getNumberOfAcceptedDeals(ActionEvent actionEvent) throws IOException {
+    public void getNumberOfAcceptedDeals(ActionEvent actionEvent) throws Exception, IOException {
         getFile();
         BufferedReader reader = new BufferedReader(new FileReader(f));
         String line;

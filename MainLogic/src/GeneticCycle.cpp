@@ -8,8 +8,11 @@
  * childs in population, and string --- name of log file.
 */
 
-GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size_t _totalSteps, size_t _movesInGame, size_t _howMuchToKill, size_t numberOfBuyerPairing, size_t numberOfSellerPairing, std::string of) :
-    totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill) , game(AuctionGame()), stats(std::move(of)), randomNumberGenerator(67) {
+GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size_t _totalSteps, size_t _movesInGame, size_t _howMuchToKill,
+        size_t numberOfBuyerPairing, size_t numberOfSellerPairing, std::string of, size_t _ptrNumber) :
+    totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill), randomNumberGenerator(67), ptrNumber(_ptrNumber),
+    moves(std::vector<std::vector<std::vector<pmove>>>(numberOfSellers, std::vector<std::vector<pmove>>(numberOfBuyers, std::vector<pmove>(0)))),
+    stats(std::move(of), _ptrNumber, &moves) {
         pairBuyers  = controller . createPairing(numberOfBuyerPairing, BUYER);
         pairSellers = controller . createPairing(numberOfSellerPairing, SELLER);
 
@@ -23,6 +26,21 @@ GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size
             buyers.push_back(new Buyer(_movesInGame, randomNumberGenerator . getRandomInt() % 1000, &randomNumberGenerator, &controller));
               //TODO random parameter is buyer's inside profit. Is this OK to just make it random?
         }
+
+        if (numberOfBuyers < ptrNumber || numberOfSellers < ptrNumber) {
+            throw(std::runtime_error("Genetic Cycle: number of buyers or sellers should be at least 10"));
+        }
+
+        createPartition(numberOfBuyers, ptrNumber, &buyersParts);
+        createPartition(numberOfSellers, ptrNumber, &sellersParts);
+}
+
+void GeneticCycle::createPartition(size_t numberOfPlayers, size_t partsNumber, std::vector<std::pair<size_t, size_t>>* parts) {
+    size_t playersInPart = numberOfPlayers / partsNumber;
+    for (size_t startPlayer = 0; startPlayer < numberOfPlayers; startPlayer += playersInPart) {
+        size_t endPlayer = std::min(startPlayer + playersInPart, numberOfPlayers);
+        parts->push_back({startPlayer, endPlayer});
+    }
 }
 
 /*
@@ -49,15 +67,25 @@ void GeneticCycle::destroyWorstPlayers(std::vector<Player*>& players) {
     players.resize(players.size() - howMuchToKill);
 }
 
+void GeneticCycle::runPartedCycle(size_t sellerPart, size_t buyerPart) {
+    AuctionGame game;
+
+    for (size_t s = sellersParts[sellerPart].first; s < sellersParts[sellerPart].second; s++) {
+        for (size_t b = buyersParts[buyerPart].first; b < buyersParts[buyerPart].second; b++) {
+            game(sellers[s], buyers[b], movesInGame, &moves[s][b]);
+        }
+    }
+}
+
 /*
  * main cycle
  */
 void GeneticCycle :: runCycle() {
-    for (size_t t = 0; t < totalSteps; t++) {
+    for (size_t currentStep = 0; currentStep < totalSteps; currentStep++) {
         clearProfit(sellers); //clear amount of money they won
         clearProfit(buyers);
 
-        stats.newStep(t);
+        stats.newStep(currentStep);
 
         for (auto s = sellers.begin(); s != sellers.end(); s++) {
             stats.gather(static_cast<size_t>(s - sellers.begin()), dynamic_cast<Seller*>(*s));
@@ -69,16 +97,20 @@ void GeneticCycle :: runCycle() {
             stats.gather(static_cast<size_t>(b - buyers.begin()), dynamic_cast<Buyer*>(*b));
         }
 
-        for (auto s = sellers.begin(); s != sellers.end(); s++) {
-            for (auto b = buyers.begin(); b != buyers.end(); b++) {
-                // game is functor that plays game between two players and return vector of moves in this game --- pair of int price sets by Seller and bool that shows if deal was accepted
-                // (also count how much money each player got)
-                // then statistic are gathering.
-                const std::vector<pmove>* moves = game(dynamic_cast<Seller*>(*s), dynamic_cast<Buyer*>(*b), movesInGame);
-                stats.gather(static_cast<size_t>(s - sellers.begin()), static_cast<size_t>(b - buyers.begin()), moves);
+        std::vector<std::thread> threads(0);
+        for (size_t shift = 0; shift < ptrNumber; shift++) {
+            threads.clear();
+            for (size_t sellerPart = 0; sellerPart < sellersParts.size(); sellerPart++) {
+                size_t buyerPart = (sellerPart + shift) % buyersParts.size();
+                threads.emplace_back(std::thread(&GeneticCycle::runPartedCycle, this, sellerPart, buyerPart));
+            }
+
+            for (auto& t : threads) {
+                t.join();
             }
         }
 
+        stats.gatherFromMoves();
         destroyWorstPlayers(buyers);
         destroyWorstPlayers(sellers);
 
@@ -87,7 +119,6 @@ void GeneticCycle :: runCycle() {
     }
 }
 
-//TODO destructor
 GeneticCycle::~GeneticCycle() {
     for (auto x : buyers) {
         delete x;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.asgui.StatisticController">
+    <top>
+        <GridPane>
+              <ToolBar GridPane.rowIndex="0">
+                  <Button fx:id="getBack" onAction="#getOnWelcomeScreen" text="Back to main menu" minWidth="200"/>
+                  <Button fx:id="runCycle" onAction="#startCycle" text="Run new genetic cycle" minWidth="250"/>
+              </ToolBar>
+                <MenuBar GridPane.rowIndex="1">
+                    <Menu text="Choose the type of statistic and a log file">
+                        <MenuItem fx:id="numberOfAcceptedDeals" text="number of accepted deals" onAction="#getNumberOfAcceptedDeals" />
+                    </Menu>
+                </MenuBar>
+        </GridPane>
+    </top>
+
+    <center>
+        <ScrollPane>
+            <Label fx:id="statisticLabel" styleClass="verySmall" wrapText="true" />
+        </ScrollPane>
+
+    </center>
+
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
+</BorderPane>

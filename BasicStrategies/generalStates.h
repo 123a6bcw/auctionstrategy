@@ -26,7 +26,7 @@ private:
     int price;
     bool sold;
 public:
-    pmove() = delete;
+    pmove() : price(0), sold(0) {};
     pmove(int pri, bool was) : price(pri), sold(was) {};
     int wasSold() const {
         return sold;

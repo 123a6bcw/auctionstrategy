@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FilenameFilter;
 
+/*
+Main class that simply runs application and has some general function.
+ */
 public class GuiMain extends Application {
 
     @Override
@@ -19,21 +22,26 @@ public class GuiMain extends Application {
         primaryStage.show();
     }
 
-    static String findFile(String fileName) {
-        String pathname = "../";
-        FilenameFilter filter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.startsWith(fileName);
-            }
-        };
+    /*
+    GUI executable supposed to be somewhere inside project directory, but not in it's root. This function finds filepath from position of this executable to some other file
+    by given filepath from project's root by simply lifting up until finding given fileName. Name's conflicts gives undefined behaviour. If given file does not exist, throws exception.
 
-        while (true) {
+    Required for portability.
+     */
+    static String findFile(String fileName) throws Exception {
+        String pathname = "../";
+        FilenameFilter filter = (dir, name) -> name.startsWith(fileName);
+
+        for (int i = 1; i <= 10; i++) {
             if ((new File(pathname)).listFiles(filter) != null) {
                 pathname += fileName;
                 break;
             } else {
                 pathname = pathname + "../";
+            }
+
+            if (i == 10) {
+                throw (new Exception("Can't find file " + fileName));
             }
         }
 

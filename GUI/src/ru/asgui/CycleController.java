@@ -78,28 +78,30 @@ public class CycleController {
         nameOfLogFileLabel.setTooltip(new Tooltip("Don't be scared of conflicting names - current time will be append to the name"));
     }
 
+    private void setSettings(Integer numberOfSellers, Integer numberOfBuyers, Integer totalSteps, Integer movesInGame, Integer howMuchToKill, Integer pairSellers, Integer pairBuyers, String logFile) {
+        this.numberOfSellers.setText(numberOfSellers.toString());
+        this.numberOfBuyers.setText(numberOfBuyers.toString());
+        this.totalSteps.setText(totalSteps.toString());
+        this.movesInGame.setText(movesInGame.toString());
+        this.howMuchToKill.setText(howMuchToKill.toString());
+        this.pairSellers.setText(pairSellers.toString());
+        this.pairBuyers.setText(pairBuyers.toString());
+        this.logFile.setText(logFile);
+    }
+
     @FXML
     protected void setBasicSettings(ActionEvent event) {
-        numberOfSellers.setText("10");
-        numberOfBuyers.setText("10");
-        totalSteps.setText("10");
-        movesInGame.setText("10");
-        howMuchToKill.setText("2");
-        pairSellers.setText("1");
-        pairBuyers.setText("1");
-        logFile.setText("basicLog.txt");
+        setSettings(10,10,10,10,2,1,1,"basicLog.txt");
     }
 
     @FXML
     protected void setLargeSettings(ActionEvent event) {
-        numberOfSellers.setText("50");
-        numberOfBuyers.setText("50");
-        totalSteps.setText("50");
-        movesInGame.setText("50");
-        howMuchToKill.setText("10");
-        pairSellers.setText("1");
-        pairBuyers.setText("1");
-        logFile.setText("largeLog.txt");
+        setSettings(50,50,50,50,5,1,1,"largeLog.txt");
+    }
+
+    @FXML
+    protected void setExtraLargeSettings(ActionEvent event) {
+        setSettings(100,100,100,100,10,1,1,"extraLargeLog.txt");
     }
 
     private Pair<String, String> getExtension(String s) {
@@ -117,33 +119,49 @@ public class CycleController {
         return new Pair<>(s.substring(0, i), s.substring(i));
     }
 
+    private String getOutput(BufferedReader buffer) throws Exception {
+        String line;
+        StringBuilder sb = new StringBuilder();
+        while ((line = buffer.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+
+        return sb.toString();
+    }
+
     @FXML
     protected void runCycle(ActionEvent event) throws Exception {
+        long startTime = System.currentTimeMillis();
+
         errorLog.setText("");
 
         Pair<String, String> extension = getExtension(logFile.getText());
         String logFileExtended = extension.getKey() + sdf.format(Calendar.getInstance().getTime()) + extension.getValue();
-
-        ProcessBuilder builder = new ProcessBuilder(GuiMain.findFile("build/auctionGame"), numberOfSellers.getText(), numberOfBuyers.getText(), totalSteps.getText(),
+        String command = GuiMain.findFile("build/auctionGame");
+        ProcessBuilder builder = new ProcessBuilder(command, numberOfSellers.getText(), numberOfBuyers.getText(), totalSteps.getText(),
                 movesInGame.getText(), howMuchToKill.getText(), pairSellers.getText(), pairBuyers.getText(), logFileExtended);
         Process process = builder.start();
         process.waitFor();
+
         if (process.exitValue() != 0) {
             BufferedReader errorBuffer =
                     new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String result = getOutput(errorBuffer);
 
-            String line = null;
-            String sb = "";
-            while ((line = errorBuffer.readLine()) != null) {
-                sb += line + "\n";
-            }
-
-            errorLog.setText("Cycle " + currentCycle +  " finished with error:\n" + sb);
+            errorLog.setText("Cycle " + currentCycle +  " finished with error:\n" + result);
         } else {
-            errorLog.setText("Cycle " + currentCycle + " successfully ended.\nYour results has been put into\nlogs/" + logFileExtended);
+            BufferedReader outputBuffer =
+                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String result = getOutput(outputBuffer);
+
+            long stopTime = System.currentTimeMillis();
+            double elapsedTime = stopTime - startTime;
+            elapsedTime /= 1000;
+            errorLog.setText("Cycle " + currentCycle + " successfully ended.\n\nYour results has been put into\nlogs/" + logFileExtended + "\n\nExecution time: " + elapsedTime + " seconds");
         }
 
         currentCycle++;
+
         header.setText("Cycle " + (currentCycle-1) + " finished\n" + "Please specify parameters of the " + currentCycle + " cycle");
     }
 
