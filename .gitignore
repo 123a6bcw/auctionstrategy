@@ -14,3 +14,4 @@ GUI/*
 logs/*
 !logs
 CMakeLists.txt
+test
