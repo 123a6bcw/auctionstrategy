@@ -7,7 +7,6 @@ build/*
 !build/run.sh
 GUI/*
 !GUI/src
-!GUI/out/artifacts/GUI/*
 !GUI/GUI.html
 !GUI.jar
 !GUI.jnlp
