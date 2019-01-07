@@ -25,35 +25,35 @@
               <Button text="extra large parameters"     onAction="#setExtraLargeSettings" HBox.hgrow="ALWAYS" />
             </HBox>
 
-            <Label fx:id="numberOfSellersLabel" text="Number of sellers in cycle" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="inCycle" onMouseMoved="#showNumberOfSellersInfo" />
+            <Label fx:id="numberOfSellersLabel" text="Number of sellers in cycle" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="inCycle"  />
              <TextField fx:id="numberOfSellers" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
             <Separator GridPane.rowIndex="4" GridPane.columnSpan="3" />
 
-            <Label fx:id="numberOfBuyersLabel" text="Number of buyers in cycle" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="inCycle" onMouseMoved="#showNumberOfBuyersInfo" />
+            <Label fx:id="numberOfBuyersLabel" text="Number of buyers in cycle" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="inCycle" />
              <TextField fx:id="numberOfBuyers" GridPane.rowIndex="5" GridPane.columnIndex="1" />
             <Separator GridPane.rowIndex="6" GridPane.columnSpan="3" />
 
-            <Label fx:id="numberOfStepsLabel" text="Number of steps in cycle" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="inCycle" onMouseMoved="#showTotalStepsInfo" />
+            <Label fx:id="numberOfStepsLabel" text="Number of steps in cycle" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="inCycle"  />
             <TextField fx:id="totalSteps" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
             <Separator GridPane.rowIndex="8" GridPane.columnSpan="3" />
 
-            <Label fx:id="numberOfMovesLabel" text="Number of moves in one game" GridPane.columnIndex="0" GridPane.rowIndex="9" styleClass="inCycle" onMouseMoved="#MovesInGame" />
+            <Label fx:id="numberOfMovesLabel" text="Number of moves in one game" GridPane.columnIndex="0" GridPane.rowIndex="9" styleClass="inCycle"  />
             <TextField fx:id="movesInGame" GridPane.rowIndex="9" GridPane.columnIndex="1" />
             <Separator GridPane.rowIndex="10" GridPane.columnSpan="3" />
 
-            <Label fx:id="numberOfPlayersDyingLabel" text="Number of players dying" GridPane.columnIndex="0" GridPane.rowIndex="11" styleClass="inCycle" onMouseMoved="#showHowMuchToKillInfo" />
+            <Label fx:id="numberOfPlayersDyingLabel" text="Number of players dying" GridPane.columnIndex="0" GridPane.rowIndex="11" styleClass="inCycle"  />
             <TextField fx:id="howMuchToKill" GridPane.rowIndex="11" GridPane.columnIndex="1" />
             <Separator GridPane.rowIndex="12" GridPane.columnSpan="3" />
 
-            <Label fx:id="numberOfSellerPairingLabel" text="Seller pairing function" GridPane.columnIndex="0" GridPane.rowIndex="13" styleClass="inCycle" onMouseMoved="#showPairSellersInfo" />
+            <Label fx:id="numberOfSellerPairingLabel" text="Seller pairing function" GridPane.columnIndex="0" GridPane.rowIndex="13" styleClass="inCycle"  />
             <TextField fx:id="pairSellers" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
             <Separator GridPane.rowIndex="14" GridPane.columnSpan="3" />
 
-            <Label fx:id="numberOfBuyerPairingLabel" text="Buyer pairing function" GridPane.columnIndex="0" GridPane.rowIndex="15" styleClass="inCycle" onMouseMoved="#showPairBuyersInfo" />
+            <Label fx:id="numberOfBuyerPairingLabel" text="Buyer pairing function" GridPane.columnIndex="0" GridPane.rowIndex="15" styleClass="inCycle" />
             <TextField fx:id="pairBuyers" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
             <Separator GridPane.rowIndex="16" GridPane.columnSpan="3" />
 
-            <Label fx:id="nameOfLogFileLabel" text="Name of log file" GridPane.columnIndex="0" GridPane.rowIndex="17" styleClass="inCycle" onMouseMoved="#showLogFileInfo" />
+            <Label fx:id="nameOfLogFileLabel" text="Name of log file" GridPane.columnIndex="0" GridPane.rowIndex="17" styleClass="inCycle"  />
             <TextField fx:id="logFile" GridPane.rowIndex="17" GridPane.columnIndex="1" />
             <Separator GridPane.rowIndex="18" GridPane.columnSpan="3" />
 

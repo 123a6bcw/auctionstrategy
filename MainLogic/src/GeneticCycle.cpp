@@ -12,9 +12,9 @@ GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size
         size_t numberOfBuyerPairing, size_t numberOfSellerPairing, std::string of, size_t _ptrNumber) :
     totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill), randomNumberGenerator(67), ptrNumber(_ptrNumber),
     moves(std::vector<std::vector<std::vector<pmove>>>(numberOfSellers, std::vector<std::vector<pmove>>(numberOfBuyers, std::vector<pmove>(0)))),
-    stats(std::move(of), _ptrNumber, &moves) {
-        pairBuyers  = controller . createPairing(numberOfBuyerPairing, BUYER);
+    stats(std::move(of), _ptrNumber, &moves, _movesInGame) {
         pairSellers = controller . createPairing(numberOfSellerPairing, SELLER);
+        pairBuyers  = controller . createPairing(numberOfBuyerPairing, BUYER);
 
         sellers = std::vector<Player*>(0);
         for (size_t i = 0; i < numberOfSellers; i++) {
@@ -31,23 +31,33 @@ GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size
             throw(std::runtime_error("Genetic Cycle: number of buyers or sellers should be at least 10"));
         }
 
-        createPartition(numberOfBuyers, ptrNumber, &buyersParts);
         createPartition(numberOfSellers, ptrNumber, &sellersParts);
+        createPartition(numberOfBuyers, ptrNumber, &buyersParts);
 }
 
-void GeneticCycle::createPartition(size_t numberOfPlayers, size_t partsNumber, std::vector<std::pair<size_t, size_t>>* parts) {
+/*
+ * Creates partition: split players with number from 1 to "numberOfPlayers" into "partsNumber" equal (possibly except the last one) parts,
+ * store in vector "parts" beginning and ending of each part: players in range [start, end) -> pair(start, end).
+ */
+void GeneticCycle::createPartition(size_t numberOfPlayers, size_t partsNumber, std::vector<std::pair<size_t, size_t>>* parts) const {
     size_t playersInPart = numberOfPlayers / partsNumber;
-    for (size_t startPlayer = 0; startPlayer < numberOfPlayers; startPlayer += playersInPart) {
-        size_t endPlayer = std::min(startPlayer + playersInPart, numberOfPlayers);
+    size_t startPlayer = 0;
+    for (size_t i = 0; i < partsNumber; i++) {
+        size_t endPlayer = startPlayer + playersInPart;
+        if (i + 1 == partsNumber) {
+            endPlayer = numberOfPlayers; // last part can be larger if (numberOfPlayers `mod` partsNumber != 0)
+        }
+
         parts->push_back({startPlayer, endPlayer});
+        startPlayer += playersInPart;
     }
 }
 
 /*
  * clears amount of money each player won on the step of the cycle
  */
-void GeneticCycle::clearProfit(std::vector<Player*>& players) {
-    for (auto x : players) {
+void GeneticCycle::clearProfit(std::vector<Player*>& players) const {
+    for (auto& x : players) {
         x -> clearGain();
     }
 }
@@ -55,18 +65,22 @@ void GeneticCycle::clearProfit(std::vector<Player*>& players) {
 /*
  * destroying players with the worst result on each step of the cycle
  */
-void GeneticCycle::destroyWorstPlayers(std::vector<Player*>& players) {
+void GeneticCycle::destroyWorstPlayers(std::vector<Player *> &players) {
     if (howMuchToKill + 1 >= players.size()) {
         throw std::runtime_error("You asked to kill too many players - should be no more than amount of players - 1");
     }
 
-    sort(players.begin(), players.end(), Player::byGain()); //sorted by amount of money they won. Descending
+    sort(players.begin(), players.end(), Player::byGain()); //sorted by amount of money they won. Ascending
+    reverse(players.begin(), players.end());
     for (size_t i = players.size() - howMuchToKill; i < players.size(); i++) {
         delete players[i];
     }
     players.resize(players.size() - howMuchToKill);
 }
 
+/*
+ * each player in given parts plays with each other. That way we can parallel this process
+ */
 void GeneticCycle::runPartedCycle(size_t sellerPart, size_t buyerPart) {
     AuctionGame game;
 
@@ -82,23 +96,21 @@ void GeneticCycle::runPartedCycle(size_t sellerPart, size_t buyerPart) {
  */
 void GeneticCycle :: runCycle() {
     for (size_t currentStep = 0; currentStep < totalSteps; currentStep++) {
-        clearProfit(sellers); //clear amount of money they won
+        clearProfit(sellers); //clear amount of money they won on previous step
         clearProfit(buyers);
 
         stats.newStep(currentStep);
-
-        for (auto s = sellers.begin(); s != sellers.end(); s++) {
-            stats.gather(static_cast<size_t>(s - sellers.begin()), dynamic_cast<Seller*>(*s));
-            //There is base class Player with derived classes Buyer and Seller, vector buyers stores Player*, but in fact they all are class Buyer, so we can (have to) use dynamic_cast<>
-            //here stats gathering info about which strategies each player uses.
-        }
-
-        for (auto b = buyers.begin(); b != buyers.end(); b++) {
-            stats.gather(static_cast<size_t>(b - buyers.begin()), dynamic_cast<Buyer*>(*b));
-        }
+        stats.gather(sellers, SELLER); //collects some sort of statistic
+        stats.gather(buyers, BUYER);
 
         std::vector<std::thread> threads(0);
         for (size_t shift = 0; shift < ptrNumber; shift++) {
+            /*
+             * for given shift for each x, sellers in part x plays with buyers in part (x + shift) % numberOfParts
+             * That way everyone plays with everyone, but for given shift, all players in parts are disjoint, so we can
+             * use threads to parallel this process
+             */
+
             threads.clear();
             for (size_t sellerPart = 0; sellerPart < sellersParts.size(); sellerPart++) {
                 size_t buyerPart = (sellerPart + shift) % buyersParts.size();
@@ -111,20 +123,22 @@ void GeneticCycle :: runCycle() {
         }
 
         stats.gatherFromMoves();
-        destroyWorstPlayers(buyers);
-        destroyWorstPlayers(sellers);
+        stats.gatherGain(sellers, SELLER);
+        stats.gatherGain(buyers, BUYER);
 
-        (*pairBuyers)(howMuchToKill, &buyers); //appends child in quantity of how much was just killed
+        destroyWorstPlayers(sellers);
+        destroyWorstPlayers(buyers);
         (*pairSellers)(howMuchToKill, &sellers);
+        (*pairBuyers)(howMuchToKill, &buyers); //appends child in quantity of how much was just killed
     }
 }
 
 GeneticCycle::~GeneticCycle() {
-    for (auto x : buyers) {
+    for (auto& x : buyers) {
         delete x;
     }
 
-    for (auto y : sellers) {
+    for (auto& y : sellers) {
         delete y;
     }
 

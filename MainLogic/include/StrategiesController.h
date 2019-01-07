@@ -7,20 +7,25 @@
 #include "../../BasicStrategies/BuyerStrategies/AllBuyerStrategies.h"
 #include "../../BasicStrategies/SellerStrategies/AllSellerStrategies.h"
 
-enum typeOfPlayer { SELLER, BUYER };
 
+/*
+ * class for accessing all created strategies
+ */
+
+enum typeOfPlayer { SELLER, BUYER };
 class PairingAbstract;
 
 class StrategiesController {
 public:
-    size_t getAmmountOfStrategies(typeOfPlayer);
+    size_t getNumberOfStrategies(typeOfPlayer);
     StrategyAbstract* createStrategy(size_t, Player*, size_t, size_t, int, typeOfPlayer);
     PairingAbstract* createPairing(size_t, typeOfPlayer);
 private:
-    const size_t ammountOfBuyerStrategies = 1;
-    const size_t ammountOfSellerStrategies = 1;
     StrategyAbstract* createSellerStrategy(size_t, Player*, size_t, size_t);
     StrategyAbstract* createBuyerStrategy(size_t, Player*, size_t, size_t, int);
     PairingAbstract*  createBuyerPairing(size_t);
     PairingAbstract*  createSellerPairing(size_t);
+
+    const size_t numberOfBuyerStrategies = 1;
+    const size_t numberOfSellerStrategies = 1;
 };

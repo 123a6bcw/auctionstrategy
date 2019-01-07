@@ -20,5 +20,7 @@ public:
     void reset() override;
     void randomParametersChange() override;
     ~SBinarySearch() override;
+    std::string getName() override;
+    std::string getDescription() override;
     StrategyAbstract* copy(Player*) const override;
 };

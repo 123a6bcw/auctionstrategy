@@ -2,6 +2,25 @@
 #include "../../BasicStrategies/Pairing/allPairing.h"
 #include "../../BasicStrategies/Pairing/PairingAbstract.h"
 
+size_t StrategiesController::getNumberOfStrategies(typeOfPlayer type) {
+    switch  (type) {
+        case SELLER:
+            return numberOfSellerStrategies;
+            break;
+        case BUYER:
+            return numberOfBuyerStrategies;
+            break;
+        default:
+            throw(std::runtime_error("?? unknown type of player"));
+
+    }
+}
+
+/*
+ * creates new strategy by given ID of strategy (index number)
+ * this function simply switches by the type of the player, creating either seller or buyer strategy
+ */
+
 StrategyAbstract* StrategiesController::createStrategy(size_t numberOfStrategy, Player* player, size_t startMove, size_t endMove, int profit, typeOfPlayer type) {
     switch (type) {
         case SELLER:
@@ -15,20 +34,9 @@ StrategyAbstract* StrategiesController::createStrategy(size_t numberOfStrategy, 
     }
 }
 
-size_t StrategiesController::getAmmountOfStrategies(typeOfPlayer type) {
-    switch  (type) {
-        case SELLER:
-            return ammountOfSellerStrategies;
-            break;
-        case BUYER:
-            return ammountOfBuyerStrategies;
-            break;
-        default:
-            throw(std::runtime_error("?? unknown type of player"));
-
-    }
-}
-
+/*
+ * here is going to be hardcoded creation of strategy by given number
+ */
 StrategyAbstract* StrategiesController::createSellerStrategy(size_t numberOfStrategy, Player* player, size_t startMove, size_t endMove) {
     switch (numberOfStrategy) {
         case 1:
@@ -50,6 +58,10 @@ StrategyAbstract* StrategiesController::createBuyerStrategy(size_t numberOfStrat
             break;
     }
 }
+
+/*
+ * absolutely the same hardcoded thing, but for pairing function
+ */
 
 PairingAbstract* StrategiesController::createPairing(size_t numberOfPairing, typeOfPlayer type) {
     switch (type) {

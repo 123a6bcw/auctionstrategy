@@ -16,6 +16,6 @@ public:
     Player* copy() const override;
     ~Buyer() override;
 private:
-    const int profit;
     explicit Buyer(const Buyer*);
+    const int profit;
 };

@@ -14,6 +14,8 @@ public:
      void reset() override;
      StrategyAbstract* copy(Player*) const override;
      ~BSimple() override;
+     std::string getName() override;
+     std::string getDescription() override;
 private:
      explicit BSimple(const BSimple*);
 };

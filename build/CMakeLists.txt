@@ -27,7 +27,7 @@ set (SOURCES ${SOURCES} ../BasicStrategies/BuyerStrategies/src/BSimple.cpp)
 set (SOURCES ${SOURCES} ../BasicStrategies/SellerStrategies/src/SBinarySearch.cpp)
 
 set (SOURCES ${SOURCES} ../MainLogic/src/AuctionGame.cpp)
-set (SOURCES ${SOURCES} ../MainLogic/src/StatisticCounter.cpp)
+set (SOURCES ${SOURCES} ../MainLogic/src/StatisticCollector.cpp)
 set (SOURCES ${SOURCES} ../MainLogic/src/GeneticCycle.cpp)
 
 set (SOURCES ${SOURCES} ../MainLogic/src/main.cpp )

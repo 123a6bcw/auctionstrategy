@@ -22,7 +22,7 @@ public:
         return (*strategies)[currentStrategy];
     }
 
-    void setPreviousMoves(std::vector<class pmove>*); // Player should know results of all previous moves in game because his strategy (may) depend on it
+    void setPreviousMoves(const std::vector<class pmove>*); // Player should know results of all previous moves in game because his strategy (may) depend on it
     static std::vector<Player*> findBestPlayers(size_t, std::vector<Player*>*); // Find players with highest gain. NOT const, sorts players (their order is not important).
 
     inline size_t getCurrentMove() const {
@@ -38,7 +38,7 @@ public:
     }
 
     void clearGain(); // clears gain of player
-    void newGame(std::vector<pmove>*); // assigns currentMove, currentStrategy and previousMoves at the start of each game.
+    void newGame(const std::vector<pmove>*); // assigns currentMove, currentStrategy and previousMoves at the start of each game.
 
     virtual void addGain(int) = 0; // function of adding gain differs for Buyer and Seller
 
@@ -46,22 +46,23 @@ public:
         bool operator () (const Player* a, const Player* b) const;
     };
 
-    virtual Player* copy() const = 0; //creates copy of this Player and all his strategies. //TODO copy RandomNumberGenerator and stuff
-    std::vector<StrategyAbstract*>* copyStrategies(Player*) const;
     RandomNumberGenerator* randomNumberGenerator;
+    virtual Player* copy() const = 0; //creates copy of this Player and all his strategies.
+    std::vector<StrategyAbstract*>* copyStrategies(Player*) const;
     virtual ~Player();
+    std::vector<StrategyAbstract*>* getStrategies() const;
 protected:
     const size_t movesInGame;
     size_t currentMove; // current move in playing game
     size_t currentStrategy; // number of current strategy player using
     int totalGain; // gain of player at the step of genetic cycle
     std::vector<StrategyAbstract*>* strategies; // all strategies player is using
-    std::vector<class pmove>* previousMoves;
+    const std::vector<class pmove>* previousMoves;
     StrategiesController* controller;
+    typeOfPlayer type; //player's type (either SELLER or BUYER)
     void shiftMove(); // increment currentMove and change currentStrategy accordingly
-    typeOfPlayer type;
 
-    inline StrategyAbstract* getCurrentStrategy() { // only Player (and derived classes) can use strategy in order to change it
+    inline StrategyAbstract* getCurrentStrategy() { // only Player (and derived classes) can use strategy with ability to change it (aka not const)
         return (*strategies)[currentStrategy];
     }
 

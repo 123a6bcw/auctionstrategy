@@ -16,7 +16,7 @@
 #include "../../BasicStrategies/Pairing/allPairing.h"
 #include "../../BasicStrategies/Pairing/PairingAbstract.h"
 #include "./AuctionGame.h"
-#include "StatisticCounter.h"
+#include "StatisticCollector.h"
 #include "StrategiesController.h"
 
 class GeneticCycle {
@@ -25,24 +25,25 @@ public:
     void runCycle(); //main cycle
     ~GeneticCycle();
 private:
+    void runPartedCycle(size_t, size_t);
+    void createPartition(size_t, size_t, std::vector<std::pair<size_t, size_t>>*) const;
+    void clearProfit(std::vector<Player*>&) const; // clears amount of money each player won on the step of the cycle
+    void destroyWorstPlayers(std::vector<Player *> &players); // destroying players with the worst result on each step of the cycle
+
     size_t totalSteps; // amount of steps in main cycle
     size_t movesInGame; // amount of steps in one game between seller and buyer
     size_t howMuchToKill; // how many sellers and buyers are going to die on each step of cycle
     std::vector<Player*> buyers; // set of buyers. Player is the base class, which have derived classes Buyer and Seller
     std::vector<Player*> sellers; // set of sellers
     //std::vector<size_t> worstPlayers; // It's never used?? set of players with the worst result on each step.
-    PairingAbstract* pairBuyers; // PairingAbstract is abstract class, which has derived classes that implements special function for creating childs in population of players
-    PairingAbstract* pairSellers;
-    void clearProfit(std::vector<Player*>&); // clears amount of money each player won on the step of the cycle
-    void destroyWorstPlayers(std::vector<Player*>& players); // destroying players with the worst result on each step of the cycle
-    StrategiesController controller;
+    PairingAbstract* pairSellers; // PairingAbstract is abstract class, which has derived classes that implements special function for creating childs in population of players
+    PairingAbstract* pairBuyers;
+    StrategiesController controller; // ???
     RandomNumberGenerator randomNumberGenerator;
 
-    const size_t ptrNumber;
-    std::vector< std::pair<size_t, size_t> > buyersParts;
+    const size_t ptrNumber; // amount of threads in cycle
+    std::vector< std::pair<size_t, size_t> > buyersParts; // partition of buyers into prtNumber parts
     std::vector< std::pair<size_t, size_t> > sellersParts;
-    void runPartedCycle(size_t, size_t);
-    void createPartition(size_t, size_t, std::vector<std::pair<size_t, size_t>>*);
-    std::vector<std::vector<std::vector<pmove>>> moves;
+    std::vector<std::vector<std::vector<pmove>>> moves; //moves[a][b] --- moves in game between a and b in current genetic cycle
     class StatisticCounter stats; // class for gathering statistic of game
 };

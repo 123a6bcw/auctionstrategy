@@ -17,9 +17,7 @@ SBinarySearch::SBinarySearch(Player* p, size_t _startMove, size_t _endMove) : Se
 SBinarySearch::SBinarySearch(const SBinarySearch* sbs) : SellerStrategyAbstract(sbs),inputMaxValue(sbs -> inputMaxValue), inputMinValue(sbs -> inputMinValue) {}
 
 StrategyAbstract* SBinarySearch::copy(Player* player) const {
-    auto copyStrategy = new SBinarySearch(this);
-    copyStrategy -> owner = player;
-    return copyStrategy;
+    return (new SBinarySearch(this))->changeOwner(player);
 }
 
 void SBinarySearch::reset() {
@@ -46,6 +44,15 @@ void SBinarySearch::randomParametersChange() {
     // TODO
 }
 
-SBinarySearch::~SBinarySearch() {
+SBinarySearch::~SBinarySearch() = default;
 
+std::string SBinarySearch::getName() {
+    return "SBinarySearch";
+}
+
+std::string SBinarySearch::getDescription() {
+    return "Binary search on buyer profit."
+           "Assumes that buyer's profit is between minValue and maxValue."
+           "Proposes deal with the average value and change minValue"
+           "and maxValue accordingly to the result of the deal.";
 }

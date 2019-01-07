@@ -16,15 +16,19 @@ bool BSimple::acceptDeal(int price) {
 }
 
 StrategyAbstract* BSimple::copy(Player* player) const {
-    auto copyStrategy = new BSimple(this);
-    copyStrategy -> owner = player;
-    return copyStrategy;
+    return (new BSimple(this))->changeOwner(player);
 }
 
 void BSimple::randomParametersChange() {
   // strategy does not have any parameters to change
 }
 
-BSimple::~BSimple() {
+BSimple::~BSimple() = default;
 
+std::string BSimple::getName() {
+    return "BSimple";
+}
+
+std::string BSimple::getDescription() {
+    return "Simplest strategy for buyer. Accepts deal if his gain isn't negative.";
 }

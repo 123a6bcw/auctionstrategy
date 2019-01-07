@@ -26,13 +26,13 @@ private:
     int price;
     bool sold;
 public:
-    pmove() : price(0), sold(0) {};
+    pmove() : price(0), sold(false) {};
     pmove(int pri, bool was) : price(pri), sold(was) {};
-    int wasSold() const {
+    inline bool wasSold() const {
         return sold;
     }
 
-    int getPrice() const {
+    inline int getPrice() const {
         return price;
     }
 };
@@ -48,6 +48,10 @@ public:
     inline int getRandomInt() {
         return dist(urng);
     }
+
+    /*
+     * gets int in range [minValue, maxValue] inclusive
+     */
     inline size_t getRandomNumber(size_t minValue, size_t maxValue) {
         return minValue + static_cast<size_t>(dist(urng)) % (maxValue - minValue + 1);
     }

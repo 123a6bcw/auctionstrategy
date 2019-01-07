@@ -3,7 +3,7 @@
  * Base class with derived classes Buyer and Seller. Operates with vector of strategies
  */
 
-Player::Player(const Player* p) : randomNumberGenerator(p -> randomNumberGenerator), movesInGame(p -> movesInGame),  controller(p -> controller) {}
+Player::Player(const Player* p) : randomNumberGenerator(p -> randomNumberGenerator), movesInGame(p -> movesInGame), strategies(p -> strategies), controller(p -> controller), type(p->type) {}
 
 Player::Player(size_t mIG, int profit, RandomNumberGenerator* rng, StrategiesController* _controller, typeOfPlayer _type) :
                                                                     randomNumberGenerator(rng), movesInGame(mIG), controller(_controller), type(_type)  {
@@ -14,10 +14,11 @@ Player::Player(size_t mIG, int profit, RandomNumberGenerator* rng, StrategiesCon
     size_t numberOfLastStrategy = 0;
     while (movesLeft > 0) {
         size_t movesInStrategy = randomNumberGenerator -> getRandomNumber(static_cast<size_t>(1), movesLeft);
-        size_t numberOfStrategy = randomNumberGenerator -> getRandomNumber(static_cast<size_t>(1), controller -> getAmmountOfStrategies(type));
-        /* TODO uncomment this when there will be more than one strategy implemented
+        size_t numberOfStrategy = randomNumberGenerator -> getRandomNumber(static_cast<size_t>(1),
+                                                                           controller->getNumberOfStrategies(type));
+        /* TODO uncomment (??) this when there will be more than one strategy implemented
         while (numberOfLastStrategy == numberOfStrategy) {
-            numberOfStrategy = controller -> getRandomInt(static_cast<size_t>(1), controller -> getAmmountOfStrategies());
+            numberOfStrategy = controller -> getRandomInt(static_cast<size_t>(1), controller -> getNumberOfStrategies());
         }*/
         numberOfLastStrategy = numberOfStrategy;
         movesLeft -= movesInStrategy;
@@ -48,14 +49,14 @@ void Player::shiftMove() {
 /*
  * Player should know results of all previous moves in game because his strategies (may) depend on it
  */
-void Player::setPreviousMoves(std::vector<pmove>* t) {
+void Player::setPreviousMoves(const std::vector<pmove>* t) {
     previousMoves = t;
 }
 
 /*
  * assigns currentMove, currentStrategy and previousMoves at the start of each game.
  */
-void Player::newGame(std::vector<pmove>* _previousMoves) {
+void Player::newGame(const std::vector<pmove>* _previousMoves) {
     setPreviousMoves(_previousMoves);
     currentMove = 0;
     currentStrategy = 0;
@@ -67,7 +68,7 @@ void Player::newGame(std::vector<pmove>* _previousMoves) {
  * functor that sorts players by their gain descending
  */
 bool Player::byGain::operator () (const Player* a, const Player* b) const {
-    return a -> totalGain > b -> totalGain;
+    return a -> totalGain < b -> totalGain;
 }
 
 /*
@@ -99,9 +100,10 @@ std::vector<Player*> Player::findBestPlayers(size_t numberOfPlayers, std::vector
     }
 
     sort(players -> begin(), players -> end(), byGain());
+    reverse(players->begin(), players->end());
     std::vector<Player*> bestPlayers;
 
-    for (size_t i = players -> size() - 1; numberOfPlayers > 0; --numberOfPlayers, --i ) {
+    for (size_t i = 0; numberOfPlayers > 0; --numberOfPlayers, ++i) {
         bestPlayers.push_back((*players)[i]);
     }
 
@@ -115,4 +117,8 @@ Player::~Player () {
     delete strategies;
 
     //All other fields exists inside Genetic Cycle hence should not be deleted
+}
+
+std::vector<StrategyAbstract*>* Player::getStrategies() const {
+    return strategies;
 }
