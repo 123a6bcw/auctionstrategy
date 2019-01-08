@@ -10,7 +10,7 @@
 #include <mutex>
 #include "../../Player/include/Buyer.h"
 #include "../../Player/include/Seller.h"
-#include "./StrategiesController.h"
+#include "../../BasicStrategies/StrategiesController.h"
 
 class StatisticCounter {
 public:

@@ -17,7 +17,7 @@
 #include "../../BasicStrategies/Pairing/PairingAbstract.h"
 #include "./AuctionGame.h"
 #include "StatisticCollector.h"
-#include "StrategiesController.h"
+#include "../../BasicStrategies/StrategiesController.h"
 
 class GeneticCycle {
 public:
@@ -38,7 +38,6 @@ private:
     //std::vector<size_t> worstPlayers; // It's never used?? set of players with the worst result on each step.
     PairingAbstract* pairSellers; // PairingAbstract is abstract class, which has derived classes that implements special function for creating childs in population of players
     PairingAbstract* pairBuyers;
-    StrategiesController controller; // ???
     RandomNumberGenerator randomNumberGenerator;
 
     const size_t ptrNumber; // amount of threads in cycle
@@ -46,4 +45,5 @@ private:
     std::vector< std::pair<size_t, size_t> > sellersParts;
     std::vector<std::vector<std::vector<pmove>>> moves; //moves[a][b] --- moves in game between a and b in current genetic cycle
     class StatisticCounter stats; // class for gathering statistic of game
+    StrategiesController controller; // ???
 };

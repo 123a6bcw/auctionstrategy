@@ -1,5 +1,5 @@
 #include "../include/GeneticCycle.h"
-#include "../include/StrategiesController.h"
+#include "../../BasicStrategies/StrategiesController.h"
 
 /*
  * Main class of the project. There is sellers and buyers, each have genome - set of strategies (with parameters) implemented in BasicStrategies,
@@ -12,7 +12,7 @@ GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size
         size_t numberOfBuyerPairing, size_t numberOfSellerPairing, std::string of, size_t _ptrNumber) :
     totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill), randomNumberGenerator(67), ptrNumber(_ptrNumber),
     moves(std::vector<std::vector<std::vector<pmove>>>(numberOfSellers, std::vector<std::vector<pmove>>(numberOfBuyers, std::vector<pmove>(0)))),
-    stats(std::move(of), _ptrNumber, &moves, _movesInGame) {
+    stats(std::move(of), _ptrNumber, &moves, _movesInGame), controller(StrategiesController(&randomNumberGenerator)) {
         pairSellers = controller . createPairing(numberOfSellerPairing, SELLER);
         pairBuyers  = controller . createPairing(numberOfBuyerPairing, BUYER);
 

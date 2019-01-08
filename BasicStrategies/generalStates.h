@@ -8,6 +8,8 @@
  * here will be defined often using functions for strategies (and classes).
  */
 
+const int minProfit = 0; //minimum and maximum possible profit
+const int maxProfit = 1000;
 
 /*
  * get middle value between a and b
@@ -15,6 +17,10 @@
 template <typename T>
 inline T getMiddle(T a, T b) {
     return a + (b - a) / 2;
+}
+
+inline size_t getLength(size_t startMove, size_t endMove) {
+    return endMove - startMove;
 }
 
 /*

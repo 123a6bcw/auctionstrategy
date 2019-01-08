@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <vector>
 #include <algorithm>
-#include "../../MainLogic/include/StrategiesController.h"
+#include "../../BasicStrategies/StrategiesController.h"
 #include "../../BasicStrategies/generalStates.h"
 #include "../../BasicStrategies/StrategyAbstract.h"
 
