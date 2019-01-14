@@ -4,7 +4,6 @@ CMakeLists
 build/*
 !build/build.sh
 !build/CMakeLists.txt
-!build/run.sh
 GUI/*
 !GUI/src
 !GUI/GUI.html
