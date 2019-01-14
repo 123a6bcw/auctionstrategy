@@ -53,13 +53,17 @@
             <TextField fx:id="pairBuyers" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
             <Separator GridPane.rowIndex="16" GridPane.columnSpan="3" />
 
-            <Label fx:id="nameOfLogFileLabel" text="Name of log file" GridPane.columnIndex="0" GridPane.rowIndex="17" styleClass="inCycle"  />
-            <TextField fx:id="logFile" GridPane.rowIndex="17" GridPane.columnIndex="1" />
+            <Label fx:id="scenarioNumberLabel" text="Scenario number" GridPane.columnIndex="0" GridPane.rowIndex="17" styleClass="inCycle"  />
+            <TextField fx:id="scenarioNumber" GridPane.rowIndex="17" GridPane.columnIndex="1" />
             <Separator GridPane.rowIndex="18" GridPane.columnSpan="3" />
 
-            <Button fx:id="runCycle" text="Run cycle!" GridPane.rowIndex="20" onAction="#runCycle" />
-           <ScrollPane GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER" GridPane.rowIndex="21" GridPane.columnIndex="0" minWidth="-Infinity" >
-            <Label fx:id="errorLog" styleClass="verySmall" wrapText="true" />
+            <Label fx:id="nameOfLogFileLabel" text="Name of log file" GridPane.columnIndex="0" GridPane.rowIndex="19" styleClass="inCycle"  />
+            <TextField fx:id="logFile" GridPane.rowIndex="19" GridPane.columnIndex="1" />
+            <Separator GridPane.rowIndex="20" GridPane.columnSpan="3" />
+
+            <Button fx:id="runCycle" text="Run cycle!" GridPane.rowIndex="22" onAction="#runCycle" GridPane.columnIndex="0" />
+           <ScrollPane GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER" GridPane.rowIndex="23" GridPane.columnIndex="0" minWidth="-Infinity" >
+            <Label fx:id="errorLog" styleClass="verySmall" wrapText="true" GridPane.columnSpan="3" />
            </ScrollPane>
         </GridPane>
     </center>

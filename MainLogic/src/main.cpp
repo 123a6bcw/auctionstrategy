@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[]) {
     
-    size_t numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers;
+    size_t numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, scenarioNumber;
     std::string logFile;
     
     try {
@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
             howMuchToKill = 2;
             pairSellers = 1;
             pairBuyers = 1;
+            scenarioNumber = 1;
             logFile = "debugLog.txt";
         } else {
             numberOfSellers = static_cast<size_t>(std::stoul(argv[1]));
@@ -27,10 +28,11 @@ int main(int argc, char* argv[]) {
             howMuchToKill = static_cast<size_t>(std::stoul(argv[5]));
             pairSellers = static_cast<size_t>(std::stoul(argv[6]));
             pairBuyers = static_cast<size_t>(std::stoul(argv[7]));
-            logFile = argv[8];
+            scenarioNumber = static_cast<size_t>(std::stoul(argv[8]));
+            logFile = argv[9];
         }
 
-        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile, 10).runCycle();
+        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile, 10, scenarioNumber).runCycle();
     }
 
     catch (std::invalid_argument& e) {

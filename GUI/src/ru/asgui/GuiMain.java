@@ -18,7 +18,7 @@ public class GuiMain extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("Welcome.fxml"));
         primaryStage.setTitle("Auction Strategy");
-        primaryStage.setScene(new Scene(root, 800, 800));
+        primaryStage.setScene(new Scene(root, 1200, 900));
         primaryStage.show();
     }
 

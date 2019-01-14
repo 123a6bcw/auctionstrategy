@@ -113,7 +113,7 @@ public class StatisticController {
                         result.append("buyers ");
                     }
                     result.append("strategies in moves played:\n");
-                    result.append(code.getValue()).append("\n");
+                    result.append(code.getValue()).append(";\n\n");
                 } else
                 if (isStrategyPlayers(code.getKey())) {
                     result.append("Players number of ");
@@ -123,12 +123,12 @@ public class StatisticController {
                         result.append("buyers ");
                     }
                     result.append("strategies:\n");
-                    result.append(code.getValue()).append("\n");
+                    result.append(code.getValue()).append(";\n\n");
                 } else
                 if (isNewCycle(code.getKey())) {
                     currentCycle++;
                     if (currentCycle != 1) {
-                        result.append("\n");
+                        result.append("\n\n");
                     }
                     result.append(currentCycle).append(" cycle:\n");
                 }

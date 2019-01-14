@@ -21,7 +21,7 @@
 
 class GeneticCycle {
 public:
-    GeneticCycle(size_t, size_t, size_t, size_t, size_t, size_t, size_t, std::string, size_t);
+    GeneticCycle(size_t, size_t, size_t, size_t, size_t, size_t, size_t, std::string, size_t, size_t);
     void runCycle(); //main cycle
     ~GeneticCycle();
 private:
@@ -45,5 +45,7 @@ private:
     std::vector< std::pair<size_t, size_t> > sellersParts;
     std::vector<std::vector<std::vector<pmove>>> moves; //moves[a][b] --- moves in game between a and b in current genetic cycle
     class StatisticCounter stats; // class for gathering statistic of game
-    StrategiesController controller; // ???
+    StrategiesController controller; // TODO comment
+    size_t scenarioNumber; //TODO comment
+    void createStandartScenario(size_t, size_t); //TODO comment
 };

@@ -9,31 +9,30 @@
 */
 
 GeneticCycle :: GeneticCycle(size_t numberOfSellers, size_t numberOfBuyers, size_t _totalSteps, size_t _movesInGame, size_t _howMuchToKill,
-        size_t numberOfBuyerPairing, size_t numberOfSellerPairing, std::string of, size_t _ptrNumber) :
+        size_t numberOfBuyerPairing, size_t numberOfSellerPairing, std::string of, size_t _ptrNumber, size_t _scenarioNumber) :
     totalSteps(_totalSteps), movesInGame(_movesInGame), howMuchToKill(_howMuchToKill), randomNumberGenerator(67), ptrNumber(_ptrNumber),
     moves(std::vector<std::vector<std::vector<pmove>>>(numberOfSellers, std::vector<std::vector<pmove>>(numberOfBuyers, std::vector<pmove>(0)))),
-    stats(std::move(of), _ptrNumber, &moves, _movesInGame), controller(StrategiesController(&randomNumberGenerator)) {
-        pairSellers = controller . createPairing(numberOfSellerPairing, SELLER);
-        pairBuyers  = controller . createPairing(numberOfBuyerPairing, BUYER);
+    stats(std::move(of), _ptrNumber, &moves, _movesInGame), controller(StrategiesController(&randomNumberGenerator)), scenarioNumber(_scenarioNumber) {
+    pairSellers = controller.createPairing(numberOfSellerPairing, SELLER);
+    pairBuyers = controller.createPairing(numberOfBuyerPairing, BUYER);
 
-        sellers = std::vector<Player*>(0);
-        for (size_t i = 0; i < numberOfSellers; i++) {
-            sellers.push_back(new Seller(_movesInGame, &randomNumberGenerator, &controller));
-        }
+    switch (scenarioNumber) {
+        case 0:
+            throw std::runtime_error("Wrong scenario number");
+            break;
+        case 1:
+                createStandartScenario(numberOfSellers, numberOfBuyers);
+                break;
+        default:
+                throw std::runtime_error("Wrong scenario number");
+                break;
+    }
 
-        buyers = std::vector<Player*>(0);
-        for (size_t i = 0; i < numberOfBuyers; i++) {
-            buyers.push_back(new Buyer(_movesInGame, randomNumberGenerator . getRandomInt() % 1000, &randomNumberGenerator, &controller));
-              //TODO random parameter is buyer's inside profit. Is this OK to just make it random?
-        }
-
-        if (numberOfBuyers < ptrNumber || numberOfSellers < ptrNumber) {
-            throw(std::runtime_error("Genetic Cycle: number of buyers or sellers should be at least 10"));
-        }
-
-        createPartition(numberOfSellers, ptrNumber, &sellersParts);
-        createPartition(numberOfBuyers, ptrNumber, &buyersParts);
+    createPartition(numberOfSellers, ptrNumber, &sellersParts);
+    createPartition(numberOfBuyers, ptrNumber, &buyersParts);
 }
+
+
 
 /*
  * Creates partition: split players with number from 1 to "numberOfPlayers" into "partsNumber" equal (possibly except the last one) parts,
@@ -96,6 +95,7 @@ void GeneticCycle::runPartedCycle(size_t sellerPart, size_t buyerPart) {
  */
 void GeneticCycle :: runCycle() {
     for (size_t currentStep = 0; currentStep < totalSteps; currentStep++) {
+        std::cout << currentStep + 1 << std::endl;
         clearProfit(sellers); //clear amount of money they won on previous step
         clearProfit(buyers);
 
@@ -144,4 +144,21 @@ GeneticCycle::~GeneticCycle() {
 
     delete pairBuyers;
     delete pairSellers;
+}
+
+void GeneticCycle::createStandartScenario(size_t numberOfSellers, size_t numberOfBuyers) {
+    sellers = std::vector<Player*>(0);
+    for (size_t i = 0; i < numberOfSellers; i++) {
+        sellers.push_back(new Seller(movesInGame, &randomNumberGenerator, &controller));
+    }
+
+    buyers = std::vector<Player*>(0);
+    for (size_t i = 0; i < numberOfBuyers; i++) {
+        buyers.push_back(new Buyer(movesInGame, randomNumberGenerator . getRandomInt() % 1000, &randomNumberGenerator, &controller));
+        //TODO random parameter is buyer's inside profit. Is this OK to just make it random?
+    }
+
+    if (numberOfBuyers < ptrNumber || numberOfSellers < ptrNumber) {
+        throw(std::runtime_error("Genetic Cycle: number of buyers or sellers should be at least 10"));
+    }
 }

@@ -1,19 +1,18 @@
 package ru.asgui;
 
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javafx.util.Pair;
+import javafx.application.Platform;
 
 import java.io.*;
 
@@ -26,24 +25,29 @@ public class CycleController {
     @FXML public Label numberOfSellerPairingLabel;
     @FXML public Label numberOfBuyerPairingLabel;
     @FXML public Label nameOfLogFileLabel;
-    @FXML private Button getBack;
-    @FXML private Button runCycle;
-    @FXML private TextField numberOfSellers;
-    @FXML private TextField numberOfBuyers;
-    @FXML private TextField totalSteps;
-    @FXML private TextField movesInGame;
-    @FXML private TextField howMuchToKill;
-    @FXML private TextField pairSellers;
-    @FXML private TextField pairBuyers;
-    @FXML private TextField logFile;
-    @FXML private Label errorLog;
-    @FXML private GridPane gridPane;
-    @FXML private Button basicSettings;
-    @FXML private Button largeSettings;
-    @FXML private Button runLogView;
-    @FXML private Label header;
-    private SimpleDateFormat sdf;
-    private int currentCycle;
+    @FXML public Label scenarioNumberLabel;
+    @FXML public Label progressLabel;
+    @FXML public ProgressBar progressBar;
+    @FXML protected Button getBack;
+    @FXML protected Button runCycle;
+    @FXML protected TextField numberOfSellers;
+    @FXML protected TextField numberOfBuyers;
+    @FXML protected TextField totalSteps;
+    @FXML protected TextField movesInGame;
+    @FXML protected TextField howMuchToKill;
+    @FXML protected TextField pairSellers;
+    @FXML protected TextField pairBuyers;
+    @FXML protected TextField scenarioNumber;
+    @FXML protected TextField logFile;
+    @FXML protected Label errorLog;
+    @FXML protected GridPane gridPane;
+    @FXML protected Button basicSettings;
+    @FXML protected Button largeSettings;
+    @FXML protected Button runLogView;
+    @FXML protected Label header;
+    @FXML protected ProgressIndicator progressIndicator;
+    protected SimpleDateFormat sdf;
+    protected int currentCycle;
 
     @FXML
     protected void getOnWelcomeScreen(ActionEvent event) throws Exception {
@@ -55,10 +59,10 @@ public class CycleController {
         currentCycle = 1; // Number of past cycles show on the top so the user won't be confused whether current cycle has ended or not. Wanted to add progress bar but too hard
         sdf = new SimpleDateFormat("-MM.dd-HH:mm:ss");  // Current date and time is added to log file's name so there will be no name's conflicts
         gridPane.getColumnConstraints().add(new ColumnConstraints(300));
-        gridPane.getColumnConstraints().add(new ColumnConstraints(200));
-        gridPane.getColumnConstraints().add(new ColumnConstraints(200));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(300));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(300));
         gridPane.getRowConstraints().add(new RowConstraints(100));
-        for (int i = 1; i <= 18; i += 2) {
+        for (int i = 1; i <= 20; i += 2) {
             gridPane.getRowConstraints().add(new RowConstraints(20));
             gridPane.getRowConstraints().add(new RowConstraints(10));
         }
@@ -76,12 +80,14 @@ public class CycleController {
         numberOfSellerPairingLabel.setTooltip(new Tooltip("Don't change. Only single Pairing function implemented"));
         numberOfBuyerPairingLabel.setTooltip(new Tooltip("Don't change. Only single Pairing function implemented"));
         nameOfLogFileLabel.setTooltip(new Tooltip("Don't be scared of conflicting names - current time will be append to the name"));
+        scenarioNumberLabel.setTooltip(new Tooltip("1: default scenario without anything special"));
+        //progressIndicator.setProgress(5);
     }
 
     /*
     Set setting of the cycle to the corresponding text fields. Helps to set common settings by pressing corresponding button.
      */
-    private void setSettings(Integer numberOfSellers, Integer numberOfBuyers, Integer totalSteps, Integer movesInGame, Integer howMuchToKill, Integer pairSellers, Integer pairBuyers, String logFile) {
+    private void setSettings(Integer numberOfSellers, Integer numberOfBuyers, Integer totalSteps, Integer movesInGame, Integer howMuchToKill, Integer pairSellers, Integer pairBuyers, String logFile, Integer scenarioNumber) {
         this.numberOfSellers.setText(numberOfSellers.toString());
         this.numberOfBuyers.setText(numberOfBuyers.toString());
         this.totalSteps.setText(totalSteps.toString());
@@ -90,21 +96,23 @@ public class CycleController {
         this.pairSellers.setText(pairSellers.toString());
         this.pairBuyers.setText(pairBuyers.toString());
         this.logFile.setText(logFile);
+        this.scenarioNumber.setText(scenarioNumber.toString());
     }
 
     @FXML
     protected void setBasicSettings(ActionEvent event) {
-        setSettings(10,10,10,10,2,1,1,"basicLog.txt");
+        setSettings(10,10,10,10,2,1,1,"basicLog.txt", 1);
     }
 
     @FXML
     protected void setLargeSettings(ActionEvent event) {
-        setSettings(50,50,50,50,5,1,1,"largeLog.txt");
+
+        setSettings(50,50,50,50,5,1,1,"largeLog.txt", 1);
     }
 
     @FXML
     protected void setExtraLargeSettings(ActionEvent event) {
-        setSettings(100,100,100,100,10,1,1,"extraLargeLog.txt");
+        setSettings(100,100,100,100,10,1,1,"extraLargeLog.txt", 1);
     }
 
     /*
@@ -112,7 +120,7 @@ public class CycleController {
     "someFileName.txt" -> ("someFileName", ".txt")
     "justFileName" (without extension) -> ("justFileName", "")
      */
-    private Pair<String, String> getExtension(String s) {
+    protected Pair<String, String> getExtension(String s) {
         int i;
         for (i = s.length() - 1; i >= 0; i--) {
             if (s.charAt(i) == '.') {
@@ -130,7 +138,7 @@ public class CycleController {
     /*
     Gets all content of some BufferedReader
      */
-    private String getOutput(BufferedReader buffer) throws Exception {
+    protected String getOutput(BufferedReader buffer) throws Exception {
         String line;
         StringBuilder sb = new StringBuilder();
         while ((line = buffer.readLine()) != null) {
@@ -145,29 +153,57 @@ public class CycleController {
      */
     @FXML
     protected void runCycle(ActionEvent event) throws Exception {
-        long startTime = System.currentTimeMillis();
+        Thread cycleThread = new Thread(new CycleTask(this));
+        cycleThread.start();
+    }
 
-        errorLog.setText("");
+    @FXML
+    protected void viewLogFile(ActionEvent event) throws Exception {
+        runLogView.getScene().setRoot(FXMLLoader.load(getClass().getResource("Statistic.fxml")));
+    }
 
-        Pair<String, String> extension = getExtension(logFile.getText());
-        // "filename" + ".extension" -> "filename" + "current time" + ".extension"
-        String logFileExtended = extension.getKey() + sdf.format(Calendar.getInstance().getTime()) + extension.getValue();
-        //path to the earlier built C++ project
-        String command = GuiMain.findFile("build/auctionGame");
-        //bash command to run project. Windows not supported.
-        ProcessBuilder builder = new ProcessBuilder(command, numberOfSellers.getText(), numberOfBuyers.getText(), totalSteps.getText(),
-                movesInGame.getText(), howMuchToKill.getText(), pairSellers.getText(), pairBuyers.getText(), logFileExtended);
-        Process process = builder.start();
-        process.waitFor();
+    class CycleTask extends Task<Void> {
+        private CycleController controller;
 
-        if (process.exitValue() != 0) {
-            //project ended with error.
-            BufferedReader errorBuffer =
-                    new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            String result = getOutput(errorBuffer);
+        public CycleTask(CycleController controller) {
+            this.controller = controller;
+        }
 
-            errorLog.setText("Cycle " + currentCycle +  " finished with error:\n" + result);
-        } else {
+        @Override
+        protected Void call() throws Exception {
+            long startTime = System.currentTimeMillis();
+
+            Platform.runLater(() -> controller.errorLog.setText(""));
+
+            Pair<String, String> extension = controller.getExtension(controller.logFile.getText());
+            // "filename" + ".extension" -> "filename" + "current time" + ".extension"
+            String logFileExtended = extension.getKey() + controller.sdf.format(Calendar.getInstance().getTime()) + extension.getValue();
+            //path to the earlier built C++ project
+            String command = GuiMain.findFile("build/auctionGame");
+            //bash command to run project. Windows not supported.
+            ProcessBuilder builder = new ProcessBuilder(command, controller.numberOfSellers.getText(), controller.numberOfBuyers.getText(), controller.totalSteps.getText(),
+                    controller.movesInGame.getText(), controller.howMuchToKill.getText(), controller.pairSellers.getText(),
+                    controller.pairBuyers.getText(), controller.scenarioNumber.getText(), logFileExtended);
+            Process process = builder.start();
+
+            ProgressTask progressTask = new ProgressTask(new BufferedReader(new InputStreamReader(process.getInputStream())), Integer.parseInt(controller.totalSteps.getText()));
+            //Platform.runLater(() -> progressIndicator.setProgress(0));
+            Platform.runLater(() -> errorLog.textProperty().bind(progressTask.messageProperty()));
+            //Platform.runLater(() -> progressIndicator.progressProperty().bind(progressTask.progressProperty()));
+
+            Thread progressThread = new Thread(progressTask);
+            progressThread.start();
+
+            process.waitFor();
+            Platform.runLater(() -> errorLog.textProperty().unbind());
+            if (process.exitValue() != 0) {
+                //project ended with error.
+                BufferedReader errorBuffer =
+                        new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                String result = controller.getOutput(errorBuffer);
+
+                Platform.runLater(() -> controller.errorLog.setText("Cycle " + controller.currentCycle +  " finished with error:\n" + result));
+            } else {
             /*
             following code is unused.
 
@@ -176,20 +212,44 @@ public class CycleController {
             String result = getOutput(outputBuffer);
             */
 
-            long stopTime = System.currentTimeMillis();
-            double elapsedTime = stopTime - startTime;
-            elapsedTime /= 1000;
+                long stopTime = System.currentTimeMillis();
+                final double elapsedTime = ((double)(stopTime - startTime)) / 1000;
 
-            errorLog.setText("Cycle " + currentCycle + " successfully ended.\n\nYour results has been put into\nlogs/" + logFileExtended + "\n\nExecution time: " + elapsedTime + " seconds");
+                Platform.runLater(() -> controller.errorLog.setText("Cycle " + controller.currentCycle +
+                         " successfully ended.\n\nYour results has been put into\nlogs/" + logFileExtended + "\n\nExecution time: " + elapsedTime + " seconds"));
+            }
+
+            Platform.runLater(() -> controller.currentCycle++);
+
+            Platform.runLater(() -> controller.header.setText("Cycle " + (controller.currentCycle-1) + " finished\n" + "Please specify parameters of the " + controller.currentCycle + " cycle"));
+
+            return null;
         }
-
-        currentCycle++;
-
-        header.setText("Cycle " + (currentCycle-1) + " finished\n" + "Please specify parameters of the " + currentCycle + " cycle");
     }
 
-    @FXML
-    protected void viewLogFile(ActionEvent event) throws Exception {
-        runLogView.getScene().setRoot(FXMLLoader.load(getClass().getResource("Statistic.fxml")));
+    class ProgressTask extends Task<Void> {
+        BufferedReader reader;
+        int numberOfSteps;
+        ProgressTask(BufferedReader reader, int numberOfSteps) {
+            this.reader = reader;
+            this.numberOfSteps = numberOfSteps;
+        }
+
+        @Override
+        protected Void call() throws Exception {
+            while (true) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    updateMessage("Finished " + line + " steps out of " + numberOfSteps);
+                    int currentStep = Integer.parseInt(line);
+                    updateProgress(currentStep, numberOfSteps);
+                    if (currentStep == numberOfSteps) {
+                        return null;
+                    }
+                }
+
+                Thread.sleep(100);
+            }
+        }
     }
 }
