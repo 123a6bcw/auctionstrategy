@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
             logFile = argv[9];
         }
 
-        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile, 10, scenarioNumber).runCycle();
+        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile, 8, scenarioNumber).runCycle();
     }
 
     catch (std::invalid_argument& e) {

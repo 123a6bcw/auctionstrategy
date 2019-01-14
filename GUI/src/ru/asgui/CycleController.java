@@ -230,6 +230,7 @@ public class CycleController {
     class ProgressTask extends Task<Void> {
         BufferedReader reader;
         int numberOfSteps;
+        String line;
         ProgressTask(BufferedReader reader, int numberOfSteps) {
             this.reader = reader;
             this.numberOfSteps = numberOfSteps;
@@ -238,7 +239,6 @@ public class CycleController {
         @Override
         protected Void call() throws Exception {
             while (true) {
-                String line;
                 while ((line = reader.readLine()) != null) {
                     updateMessage("Finished " + line + " steps out of " + numberOfSteps);
                     int currentStep = Integer.parseInt(line);
@@ -248,7 +248,7 @@ public class CycleController {
                     }
                 }
 
-                Thread.sleep(100);
+                //Thread.sleep(200);
             }
         }
     }
