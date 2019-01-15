@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 project(auctionGame)
 
 set(CMAKE_CXX_STANDARD 11)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-declarations -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wsign-conversion -Wsign-promo -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused-parameter")
+# All compilations flags with warnings is in CMakeLists.txt in the root directory. CMakeLists.txt in build directory is relise version without them.
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 include_directories( "../BasicStrategies" )
 include_directories( "../MainLogic/include" )
@@ -43,6 +44,7 @@ set (SOURCES ${SOURCES} ../MainLogic/src/StatisticCollector.cpp ../MainLogic/inc
 set (SOURCES ${SOURCES} ../MainLogic/src/GeneticCycle.cpp ../MainLogic/include/GeneticCycle.h)
 set (SOURCES ${SOURCES} ../MainLogic/src/PartedGeneticCycle.cpp ../MainLogic/include/PartedGeneticCycle.h)
 set (SOURCES ${SOURCES} ../MainLogic/src/PlayersHandler.cpp ../MainLogic/include/PlayersHandler.h)
+set (SOURCES ${SOURCES} ../MainLogic/src/PartedStatisticCollector.cpp ../MainLogic/include/PartedStatisticCollector.h)
 
 set (SOURCES ${SOURCES} ../MainLogic/src/main.cpp)
 add_executable (auctionGame ${SOURCES})

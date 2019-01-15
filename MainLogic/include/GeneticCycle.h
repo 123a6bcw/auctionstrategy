@@ -2,7 +2,7 @@
 
 /*
  * Main class of the project. There is sellers and buyers, each have genome - set of strategies (with parameters) implemented in BasicStrategies,
- * Runs cycle, on each step all players play with each other, then worst players replaces with childs creating via pairing class. All info are saving into log file via class StatisticCounter.
+ * Runs cycle, on each step all players play with each other, then worst players replaces with childs creating via pairing class. All info are saving into log file via class StatisticCollector.
 */
 
 #include <algorithm>
@@ -28,7 +28,7 @@ public:
 private:
     class PlayersHandler playersHandler;
     class PartedGeneticCycle partedGeneticCycle;
-    class StatisticCounter stats;
+    class StatisticCollector stats;
     std::vector<std::thread> threads; //TODO comment
 
     size_t totalSteps; // amount of steps in main cycle

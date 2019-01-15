@@ -4,9 +4,15 @@
  * player who accepts (or refuses) proposed deal.
  */
 
-Buyer::Buyer(const Buyer* b) : Player(b), profit(b -> profit) {}
+Buyer::Buyer(const Buyer* b) :
+Player(b),
+profit(b -> profit)
+{}
 
-Buyer::Buyer(size_t _movesInGame, int _profit, RandomNumberGenerator* rng, StrategiesController* ctrl) : Player(_movesInGame, _profit, rng, ctrl, BUYER), profit(_profit) {
+Buyer::Buyer(size_t movesInGame, int profit, RandomNumberGenerator* randomNumberGenerator, StrategiesController* controller) :
+Player(movesInGame, profit, randomNumberGenerator, controller, BUYER),
+profit(profit)
+{
     if (movesInGame == 0) {
         throw std::runtime_error("there cannot be zero moves in one game");
     }

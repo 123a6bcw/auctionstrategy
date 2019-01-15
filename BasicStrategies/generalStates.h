@@ -49,8 +49,9 @@ private:
     std::mt19937 urng;
     std::uniform_int_distribution<int> dist;
 public:
-    RandomNumberGenerator() = delete;
     explicit RandomNumberGenerator(size_t);
+
+    //TODO comment
     inline int getRandomInt() {
         return dist(urng);
     }
@@ -61,10 +62,12 @@ public:
     inline size_t getRandomNumber(size_t minValue, size_t maxValue) {
         return minValue + static_cast<size_t>(dist(urng)) % (maxValue - minValue + 1);
     }
-
     template <typename T>
     inline T getRandomNumber(T minValue, T maxValue) {
         return minValue + dist(urng) % (maxValue - minValue + 1);
     }
+
+    //TODO comment
     void shuffle(std::vector<int>&);
+    RandomNumberGenerator() = delete;
 };

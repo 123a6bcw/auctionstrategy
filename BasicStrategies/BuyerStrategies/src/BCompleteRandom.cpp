@@ -3,14 +3,16 @@
 
 #define NAMEOFSTRATEGY BCompleteRandom
 
-NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* p, size_t _startMove, size_t _endMove, int _profit) : BuyerStrategyAbstract(p, _startMove, _endMove, _profit) {
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* player, size_t startMove, size_t endMove, int profit):
+BuyerStrategyAbstract(player, startMove, endMove, profit)
+{
 }
 
 /*
 * Copying 
 * There is no parameters in this strategy
 */
-NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* bs) : BuyerStrategyAbstract(bs) {
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* anotherStrategy) : BuyerStrategyAbstract(anotherStrategy) {
 }
 
 /*

@@ -1,19 +1,20 @@
 /*
  * Template for creating sellers's strategy.
  * INSTRUCTION
- 1. Create header file with desired name.                           +
+ 1. Create header file with desired name.                           -
  2. Only change NAMEOFSTRATEGY in header file
-      (or add. functions and parameters), (check name conflicts!)   +
- 3. Change #include "../include/???.h" according to header          +
- 4. Define NAMEOFSTRATEGY in this file according to header file     +
- 5. Implement all listed function                                   +
- 6. include created header file to AllSellerStrategies.h            +
- 7. in StrategiesController.h increment numberOfSellerStrategies    +
+      (or add. functions and parameters), (check name conflicts!)   -
+ 3. Change #include "../include/???.h" according to header          -
+ 4. Define NAMEOFSTRATEGY in this file according to header file     -
+ 5. Implement all listed function                                   -
+ 6. include created header file to AllSellerStrategies.h            -
+ 7. in StrategiesController.h increment numberOfSellerStrategies    -
  8. in StrategiesController.cpp in function createSellerStrategy:
-       * add case with consectuive number                           +
-       * implement calling constructor for creating strategy with   +
+       * add case with consectuive number                           -
+       * implement calling constructor for creating strategy with   -
            default (random) parameters
- 9. add this cpp file to CMakeLists.txt                             +
+ 9. add this cpp file to CMakeLists.txt                             -
+ 10. delete this list
  */
 
 #include "../include/SCompleteRandom.h"
@@ -31,14 +32,18 @@
 * Constructor.
 * TODO: implement
 */
-NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* p, size_t _startMove, size_t _endMove) : SellerStrategyAbstract(p, _startMove, _endMove) {
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* player, size_t startMove, size_t endMove):
+SellerStrategyAbstract(player, startMove, endMove)
+{
 }
 
 /*
 * Copying;
 * TODO: implement
 */
-NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* sbs) : SellerStrategyAbstract(sbs) {
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* anotherStrategy):
+SellerStrategyAbstract(anotherStrategy)
+{
 }
 
 /*

@@ -28,7 +28,7 @@ StrategyAbstract* StrategiesController::createBuyerStrategy(size_t numberOfStrat
             break;
         case 3:
             return new BIncreaseProfit(player, startMove, endMove, profit,
-                         profit + rng->getRandomNumber(minProfit, maxProfit - profit), rng->getRandomNumber(0, getLength(startMove, endMove)));
+                         profit + randomNumberGenerator->getRandomNumber(minProfit, maxProfit - profit), randomNumberGenerator->getRandomNumber(0, getLength(startMove, endMove)));
             break;
         default:
             throw(std::runtime_error("createBuyerStrategy: Number of strategy is higher than amount of strategies"));
@@ -103,4 +103,4 @@ PairingAbstract* StrategiesController::createPairing(size_t numberOfPairing, typ
     }
 }
 
-StrategiesController::StrategiesController(RandomNumberGenerator* _rng) : rng(_rng) {}
+StrategiesController::StrategiesController(RandomNumberGenerator* randomNumberGenerator) : randomNumberGenerator(randomNumberGenerator) {}

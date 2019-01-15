@@ -8,13 +8,19 @@
 #include <iostream>
 #include "../../../Player/include/Player.h"
 
-SBinarySearch::SBinarySearch(Player* p, size_t _startMove, size_t _endMove) : SellerStrategyAbstract(p, _startMove, _endMove) {
-    inputMaxValue = p -> randomNumberGenerator -> getRandomNumber(5, 1000);
-    inputMinValue = p -> randomNumberGenerator -> getRandomNumber(0, inputMaxValue - 2);
+SBinarySearch::SBinarySearch(Player* player, size_t startMove, size_t endMove):
+SellerStrategyAbstract(player, startMove, endMove)
+{
+    inputMaxValue = player -> randomNumberGenerator -> getRandomNumber(5, maxProfit);
+    inputMinValue = player -> randomNumberGenerator -> getRandomNumber(0, inputMaxValue - 2);
     // TODO change assigning of input values?
 }
 
-SBinarySearch::SBinarySearch(const SBinarySearch* sbs) : SellerStrategyAbstract(sbs),inputMaxValue(sbs -> inputMaxValue), inputMinValue(sbs -> inputMinValue) {}
+SBinarySearch::SBinarySearch(const SBinarySearch* sBinarySearch):
+SellerStrategyAbstract(sBinarySearch),
+inputMaxValue(sBinarySearch -> inputMaxValue),
+inputMinValue(sBinarySearch -> inputMinValue)
+{}
 
 StrategyAbstract* SBinarySearch::copy(Player* player) const {
     return (new SBinarySearch(this))->changeOwner(player);

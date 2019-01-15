@@ -3,15 +3,25 @@
  * Base class with derived classes Buyer and Seller. Operates with vector of strategies
  */
 
-Player::Player(const Player* p) : randomNumberGenerator(p -> randomNumberGenerator), movesInGame(p -> movesInGame), strategies(p -> strategies), controller(p -> controller), type(p->type) {}
+Player::Player(const Player* p) :
+randomNumberGenerator(p -> randomNumberGenerator),
+controller(p -> controller),
+movesInGame(p -> movesInGame),
+strategies(p -> strategies),
+type(p->type)
+{}
 
-Player::Player(size_t mIG, int profit, RandomNumberGenerator* rng, StrategiesController* _controller, typeOfPlayer _type) :
-                                                                    randomNumberGenerator(rng), movesInGame(mIG), controller(_controller), type(_type)  {
+Player::Player(size_t movesInGame, int profit, RandomNumberGenerator* randomNumberGenerator, StrategiesController* controller, typeOfPlayer type) :
+randomNumberGenerator(randomNumberGenerator),
+controller(controller),
+movesInGame(movesInGame),
+type(type)
+{
     //does not initialise fields that always should initialise at the start of each game from class AuctionGame.
     strategies = new std::vector<StrategyAbstract*>(0);
     auto movesLeft = movesInGame;
     size_t moveOfStrategy = 0;
-    size_t numberOfLastStrategy = 0;
+    //size_t numberOfLastStrategy = 0;
     while (movesLeft > 0) {
         size_t movesInStrategy = randomNumberGenerator -> getRandomNumber(static_cast<size_t>(1), movesLeft);
         size_t numberOfStrategy = randomNumberGenerator -> getRandomNumber(static_cast<size_t>(1),
@@ -20,7 +30,7 @@ Player::Player(size_t mIG, int profit, RandomNumberGenerator* rng, StrategiesCon
         while (numberOfLastStrategy == numberOfStrategy) {
             numberOfStrategy = controller -> getRandomInt(static_cast<size_t>(1), controller -> getNumberOfStrategies());
         }*/
-        numberOfLastStrategy = numberOfStrategy;
+        //numberOfLastStrategy = numberOfStrategy;
         movesLeft -= movesInStrategy;
         strategies->push_back(controller -> createStrategy(numberOfStrategy, this, moveOfStrategy, moveOfStrategy + movesInStrategy - 1, profit, type));
         moveOfStrategy += movesInStrategy;

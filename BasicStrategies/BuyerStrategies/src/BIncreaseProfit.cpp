@@ -1,21 +1,3 @@
-/*
- * Template for creating buyer's strategy.
- * INSTRUCTION
- 1. Create header file with desired name.                           +
- 2. Only change NAMEOFSTRATEGY in header file                       +
-         (check name conflicts!)
- 3. Change #include "../include/???.h" to according filename        +
- 4. Define NAMEOFSTRATEGY in this file according to header file     +
- 5. Implement all listed function                                   -
- 6. include created header file to AllBuyerStrategies.h             -
- 7. in StrategiesController.h increment numberOfBuyerStrategies     -
- 8. in StrategiesController.cpp in function createBuyerStrategy:    -
-       * add case with consectuive number 
-       * implement calling constructor for creating strategy with 
-           default (random) parameters
- 9. add this cpp file to CMakeLists.txt                             -
- */
-
 #include "../include/BIncreaseProfit.h"
 #include "../../../Player/include/Player.h"
 
@@ -29,16 +11,23 @@
 /*
 * Constuctor. Some additional parameteres may required
 */
-NAMEOFSTRATEGY :: NAMEOFSTRATEGY(Player* p, size_t _startMove, size_t _endMove, int _profit, int _falseProfit, size_t _pretendMovesLength) :
-              BuyerStrategyAbstract(p, _startMove, _endMove, _profit), falseProfit(_falseProfit), pretendMovesLength(_pretendMovesLength) {
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* player, size_t startMove, size_t endMove, int profit, int falseProfit, size_t pretendMovesLength) :
+BuyerStrategyAbstract(player, startMove, endMove, profit),
+falseProfit(falseProfit),
+pretendMovesLength(pretendMovesLength)
+{
     pretendMovesLeft = pretendMovesLength;
 }
 
 /*
 * Copying
 */
-NAMEOFSTRATEGY :: NAMEOFSTRATEGY(const NAMEOFSTRATEGY* bs) : BuyerStrategyAbstract(bs), falseProfit(bs->falseProfit), pretendMovesLength(bs->pretendMovesLength) {
-    pretendMovesLeft = bs->pretendMovesLeft;
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* anotherStrategy):
+BuyerStrategyAbstract(anotherStrategy),
+falseProfit(anotherStrategy->falseProfit),
+pretendMovesLength(anotherStrategy->pretendMovesLength),
+pretendMovesLeft(anotherStrategy->pretendMovesLeft)
+{
 }
 
 /*
@@ -60,18 +49,18 @@ bool NAMEOFSTRATEGY::acceptDeal(int price) {
 }
 
 /*
+* Short description what does this strategy doing.
+*/
+std::string NAMEOFSTRATEGY::getDescription() {
+    return "Plays simple strategy, but for given number of moves pretends his profit is falseProfit where falseProfit > profit";
+}
+
+/*
 * Not quite sure yet that this function supposed to be doing. Something like slightly changing the parameters for genetic diversity.
 * TODO: Implement, comments
 */
 void NAMEOFSTRATEGY::randomParametersChange() {
     // idk yet that to write
-}
-
-/*
-* Short description what does this strategy doing.
-*/
-std::string NAMEOFSTRATEGY::getDescription() {
-    return "Plays simple strategy, but for given number of moves pretends his profit is falseProfit where falseProfit > profit";
 }
 
 /*

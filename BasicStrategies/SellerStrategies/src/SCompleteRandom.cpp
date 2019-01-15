@@ -1,21 +1,3 @@
-/*
- * Template for creating sellers's strategy.
- * INSTRUCTION
- 1. Create header file with desired name.                           +
- 2. Only change NAMEOFSTRATEGY in header file
-      (or add. functions and parameters), (check name conflicts!)   +
- 3. Change #include "../include/???.h" according to header          +
- 4. Define NAMEOFSTRATEGY in this file according to header file     +
- 5. Implement all listed function                                   +
- 6. include created header file to AllSellerStrategies.h            +
- 7. in StrategiesController.h increment numberOfSellerStrategies    +
- 8. in StrategiesController.cpp in function createSellerStrategy:
-       * add case with consectuive number                           +
-       * implement calling constructor for creating strategy with   +
-           default (random) parameters
- 9. add this cpp file to CMakeLists.txt                             +
- */
-
 #include "../include/SCompleteRandom.h"
 #include <iostream>
 #include "../../../Player/include/Player.h"
@@ -30,13 +12,18 @@
 /*
 * Constructor.
 */
-NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* p, size_t _startMove, size_t _endMove, int _minValue, int _maxValue) : SellerStrategyAbstract(p, _startMove, _endMove),
-  minValue(_minValue), maxValue(_maxValue) {}
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* player, size_t startMove, size_t endMove, int minValue, int maxValue):
+SellerStrategyAbstract(player, startMove, endMove),
+  minValue(minValue), maxValue(maxValue) {}
 
 /*
 * Copying;
 */
-NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* sbs) : SellerStrategyAbstract(sbs), minValue(sbs->minValue), maxValue(sbs->maxValue) {}
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* anotherStrategy):
+SellerStrategyAbstract(anotherStrategy),
+minValue(anotherStrategy->minValue),
+maxValue(anotherStrategy->maxValue)
+{}
 
 /*
 * Set changing fields during playing one game to it's default values

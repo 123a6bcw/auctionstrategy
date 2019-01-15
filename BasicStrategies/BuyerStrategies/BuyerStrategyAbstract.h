@@ -9,7 +9,7 @@
 
 class BuyerStrategyAbstract: public StrategyAbstract {
 public:
-    BuyerStrategyAbstract(Player* p, size_t _startMove, size_t _endMove, int _profit) : StrategyAbstract(p, _startMove, _endMove), profit(_profit) {};
+    BuyerStrategyAbstract(Player* player, size_t startMove, size_t endMove, int profit) : StrategyAbstract(player, startMove, endMove), profit(profit) {};
     virtual bool acceptDeal(int) = 0; // either accepts or refuse deal proposed by seller
 protected:
     const int profit; //How much money buyer gain from buying product

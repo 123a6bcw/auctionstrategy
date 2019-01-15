@@ -16,11 +16,11 @@ private:
     explicit SBinarySearch(const SBinarySearch*);
 public:
     SBinarySearch(Player*, size_t, size_t);
-    int setPrice() override; //for comments on overrided functions see AbstractStrategy and SellerAbstractStrategy
+    StrategyAbstract* copy(Player*) const override;
     void reset() override;
+    int setPrice() override; //for comments on overrided functions see AbstractStrategy and SellerAbstractStrategy
     void randomParametersChange() override;
     ~SBinarySearch() override;
     std::string getName() override;
     std::string getDescription() override;
-    StrategyAbstract* copy(Player*) const override;
 };

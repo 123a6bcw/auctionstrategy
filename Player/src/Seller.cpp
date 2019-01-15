@@ -5,9 +5,13 @@
  * Player who sets price and proposes deal to buyer
  */
 
-Seller::Seller(const Seller* s) : Player(s) {}
+Seller::Seller(const Seller* s) :
+Player(s)
+{}
 
-Seller::Seller(size_t _movesInGame, RandomNumberGenerator* rng, StrategiesController* ctrl) : Player(_movesInGame, -1, rng, ctrl, SELLER) {
+Seller::Seller(size_t movesInGame, RandomNumberGenerator* randomNumberGenerator, StrategiesController* controller) :
+Player(movesInGame, -1, randomNumberGenerator, controller, SELLER)
+{
     totalGain = 0;
 }
 

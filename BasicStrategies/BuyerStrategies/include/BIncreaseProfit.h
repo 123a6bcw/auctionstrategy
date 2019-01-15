@@ -9,14 +9,15 @@
 #define NAMEOFSTRATEGY BIncreaseProfit
 class NAMEOFSTRATEGY : public BuyerStrategyAbstract {
 public:
-     NAMEOFSTRATEGY(Player* p, size_t _startMove, size_t _endMove, int _profit, int, size_t); // Declaration may change!
+     NAMEOFSTRATEGY(Player*, size_t, size_t, int, int, size_t); // Declaration may change!
+    void reset() override; // declaration immutable
      bool acceptDeal(int) override; // declaration immutable
+    std::string getDescription() override; // declaration immutable
      void randomParametersChange() override; // declaration immutable
-     void reset() override; // declaration immutable
+
      StrategyAbstract* copy(Player*) const override; // declaration immutable
      ~NAMEOFSTRATEGY() override; // declaration immutable
      std::string getName() override; // declaration immutable
-     std::string getDescription() override; // declaration immutable
 private:
      explicit NAMEOFSTRATEGY(const NAMEOFSTRATEGY*); // declaration immutable
      int falseProfit;

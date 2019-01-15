@@ -9,8 +9,8 @@
 
 class SellerStrategyAbstract : public StrategyAbstract {
 public:
-    SellerStrategyAbstract(Player* p, size_t _startMove, size_t _endMove) : StrategyAbstract(p, _startMove, _endMove) {};
+    SellerStrategyAbstract(Player* player, size_t startMove, size_t endMove) : StrategyAbstract(player, startMove, endMove) {};
     virtual int setPrice() = 0;
 protected:
-    explicit SellerStrategyAbstract(const SellerStrategyAbstract* ssa) : StrategyAbstract(ssa) {};
+    explicit SellerStrategyAbstract(const SellerStrategyAbstract* sellerStrategyAbstract) : StrategyAbstract(sellerStrategyAbstract) {};
 };

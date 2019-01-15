@@ -16,10 +16,8 @@ PlayersHandler::PlayersHandler(size_t seed, size_t movesInGame, size_t howMuchTo
     pairSellers(controller.createPairing(numberOfSellerPairing, SELLER)),
     pairBuyers(controller.createPairing(numberOfBuyerPairing, BUYER))
     {
+
     switch (scenarioNumber) {
-        case 0:
-            throw std::runtime_error("Wrong scenario number");
-            break;
         case 1:
             createStandartScenario(numberOfSellers, numberOfBuyers);
             break;
@@ -83,7 +81,7 @@ void PlayersHandler::createStandartScenario(size_t numberOfSellers, size_t numbe
 
     buyers = std::vector<Player*>(0);
     for (size_t i = 0; i < numberOfBuyers; i++) {
-    buyers.push_back(new Buyer(movesInGame, randomNumberGenerator . getRandomInt() % 1000, &randomNumberGenerator, &controller));
+    buyers.push_back(new Buyer(movesInGame, randomNumberGenerator . getRandomInt() % maxProfit, &randomNumberGenerator, &controller));
     //TODO random parameter is buyer's inside profit. Is this OK to just make it random?
     }
 }

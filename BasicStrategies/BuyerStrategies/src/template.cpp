@@ -14,9 +14,10 @@
        * implement calling constructor for creating strategy with   -
            default (random) parameters
  9. add this cpp file to CMakeLists.txt                             -
+ 10. delete this list                                               -
  */
 
-#include "../include/???.h"
+#include "../include/???.h" //sorry, couldn't make define works for include
 #include "../../../Player/include/Player.h"
 
 #define NAMEOFSTRATEGY ???
@@ -30,14 +31,17 @@
 * Constuctor. Some additional parameteres may required
 * TODO: Implement.
 */
-NAMEOFSTRATEGY :: NAMEOFSTRATEGY(Player* p, size_t _startMove, size_t _endMove, int _profit) : BuyerStrategyAbstract(p, _startMove, _endMove, _profit) {
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(Player* player, size_t startMove, size_t endMove, int profit):
+BuyerStrategyAbstract(player, startMove, endMove, profit)
+{
 }
 
 /*
 * Copying
 * TODO: Implement
 */
-NAMEOFSTRATEGY :: NAMEOFSTRATEGY(const NAMEOFSTRATEGY* bs) : BuyerStrategyAbstract(bs) {
+NAMEOFSTRATEGY::NAMEOFSTRATEGY(const NAMEOFSTRATEGY* anotherStrategy):
+BuyerStrategyAbstract(anotherStrategy) {
 }
 
 /*
@@ -56,18 +60,18 @@ bool NAMEOFSTRATEGY::acceptDeal(int price) {
 }
 
 /*
-* Not quite sure yet that this function supposed to be doing. Something like slightly changing the parameters for genetic diversity.
-* TODO: Implement, comments
-*/
-void NAMEOFSTRATEGY::randomParametersChange() {
-}
-
-/*
 * Short description what does this strategy doing.
 * TODO: Implement
 */
 std::string NAMEOFSTRATEGY::getDescription() {
-    return "";
+return "";
+}
+
+/*
+* Not quite sure yet that this function supposed to be doing. Something like slightly changing the parameters for genetic diversity.
+* TODO: Implement, comments
+*/
+void NAMEOFSTRATEGY::randomParametersChange() {
 }
 
 /*

@@ -8,14 +8,14 @@
 
 class BSimple : public BuyerStrategyAbstract {
 public:
-     BSimple(Player* p, size_t _startMove, size_t _endMove, int _profit) : BuyerStrategyAbstract(p, _startMove, _endMove, _profit) {};
+     BSimple(Player* player, size_t startMove, size_t endMove, int profit) : BuyerStrategyAbstract(player, startMove, endMove, profit) {};
+     void reset() override;
      bool acceptDeal(int) override;
      void randomParametersChange() override;
-     void reset() override;
-     StrategyAbstract* copy(Player*) const override;
-     ~BSimple() override;
-     std::string getName() override;
      std::string getDescription() override;
+    StrategyAbstract* copy(Player*) const override;
+    std::string getName() override;
+    ~BSimple() override;
 private:
      explicit BSimple(const BSimple*);
 };
