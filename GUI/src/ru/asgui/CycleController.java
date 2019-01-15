@@ -28,6 +28,7 @@ public class CycleController {
     @FXML public Label scenarioNumberLabel;
     @FXML public Label progressLabel;
     @FXML public ProgressBar progressBar;
+    @FXML public Button stopCycle;
     @FXML protected Button getBack;
     @FXML protected Button runCycle;
     @FXML protected TextField numberOfSellers;
@@ -82,6 +83,7 @@ public class CycleController {
         nameOfLogFileLabel.setTooltip(new Tooltip("Don't be scared of conflicting names - current time will be append to the name"));
         scenarioNumberLabel.setTooltip(new Tooltip("1: default scenario without anything special"));
         //progressIndicator.setProgress(5);
+        Platform.runLater(() -> stopCycle.setDisable(true)); //pressing this button before cycleThread is started causing error
     }
 
     /*
@@ -148,61 +150,104 @@ public class CycleController {
         return sb.toString();
     }
 
+    private Thread cycleThread; //saving this so we could safely close this thread pressing another button
+    private volatile boolean exitCycle = false; // when true thread with cycle should stop
     /*
     runs cycle after filling all text fields with settings
      */
     @FXML
     protected void runCycle(ActionEvent event) throws Exception {
-        Thread cycleThread = new Thread(new CycleTask(this));
+        /*
+         Use of thread is necessity to update the progress of the process online
+          */
+        cycleThread = new Thread(new CycleTask());
         cycleThread.start();
     }
 
+    /*
+    Go to page with viewing log file
+     */
     @FXML
     protected void viewLogFile(ActionEvent event) throws Exception {
         runLogView.getScene().setRoot(FXMLLoader.load(getClass().getResource("Statistic.fxml")));
     }
 
-    class CycleTask extends Task<Void> {
-        private CycleController controller;
+    @FXML
+    public void stopCycle(ActionEvent actionEvent) throws Exception {
+        exitCycle = true;
+        while (cycleThread.isAlive()) {
+        }
+        runCycle.setDisable(false);
+        stopCycle.setDisable(true);
+        exitCycle = false;
+    }
 
-        public CycleTask(CycleController controller) {
-            this.controller = controller;
+    /*
+       Thread of running process with cycle
+     */
+    class CycleTask extends Task<Void> {
+        private void afterStop(Process process, String logFile) {
+            process.destroy();
+            Platform.runLater(() -> errorLog.setText(errorLog.getText() + "\nExecution interrupted\nbeware of unfinished logs/" + logFile));
         }
 
         @Override
         protected Void call() throws Exception {
             long startTime = System.currentTimeMillis();
+            Platform.runLater(() -> runCycle.setDisable(true));
+            Platform.runLater(() -> stopCycle.setDisable(false));
 
-            Platform.runLater(() -> controller.errorLog.setText(""));
+            Platform.runLater(() -> errorLog.setText(""));
 
-            Pair<String, String> extension = controller.getExtension(controller.logFile.getText());
             // "filename" + ".extension" -> "filename" + "current time" + ".extension"
-            String logFileExtended = extension.getKey() + controller.sdf.format(Calendar.getInstance().getTime()) + extension.getValue();
+            Pair<String, String> extension = getExtension(logFile.getText());
             //path to the earlier built C++ project
-            String command = GuiMain.findFile("build/auctionGame");
+            String logFileExtended = extension.getKey() + sdf.format(Calendar.getInstance().getTime()) + extension.getValue();
             //bash command to run project. Windows not supported.
-            ProcessBuilder builder = new ProcessBuilder(command, controller.numberOfSellers.getText(), controller.numberOfBuyers.getText(), controller.totalSteps.getText(),
-                    controller.movesInGame.getText(), controller.howMuchToKill.getText(), controller.pairSellers.getText(),
-                    controller.pairBuyers.getText(), controller.scenarioNumber.getText(), logFileExtended);
+            String command = GuiMain.findFile("build/auctionGame");
+            ProcessBuilder builder = new ProcessBuilder(command, numberOfSellers.getText(), numberOfBuyers.getText(), totalSteps.getText(),
+                    movesInGame.getText(), howMuchToKill.getText(), pairSellers.getText(),
+                    pairBuyers.getText(), scenarioNumber.getText(), logFileExtended);
             Process process = builder.start();
 
-            ProgressTask progressTask = new ProgressTask(new BufferedReader(new InputStreamReader(process.getInputStream())), Integer.parseInt(controller.totalSteps.getText()));
-            //Platform.runLater(() -> progressIndicator.setProgress(0));
-            Platform.runLater(() -> errorLog.textProperty().bind(progressTask.messageProperty()));
-            //Platform.runLater(() -> progressIndicator.progressProperty().bind(progressTask.progressProperty()));
+            /*
+            updating progress of process. After finishing cycle step, process prints current step to output. This cycle reads it
+            and updates log label accordingly
+             */
+            String line = "";
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            int numberOfSteps = Integer.parseInt(totalSteps.getText());
+            int currentStep = 0;
+            while (currentStep < numberOfSteps) {
+                if (exitCycle) {
+                    //someone called this thread to stop
+                    afterStop(process, logFileExtended);
+                    return null;
+                }
 
-            Thread progressThread = new Thread(progressTask);
-            progressThread.start();
+                while ((line = reader.readLine()) != null) {
+                    if (exitCycle) {
+                        //someone called this cycle to stop
+                        afterStop(process, logFileExtended);
+                        return null;
+                    }
+
+                    final String currentRes = "Finished " + line + " steps out of " + numberOfSteps;
+                    Platform.runLater(() -> errorLog.setText(currentRes));
+                    currentStep = Integer.parseInt(line);
+
+                }
+                //Thread.sleep(200);
+            }
 
             process.waitFor();
-            Platform.runLater(() -> errorLog.textProperty().unbind());
             if (process.exitValue() != 0) {
-                //project ended with error.
+                //project execution ended with error.
                 BufferedReader errorBuffer =
                         new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                String result = controller.getOutput(errorBuffer);
+                String result = getOutput(errorBuffer);
 
-                Platform.runLater(() -> controller.errorLog.setText("Cycle " + controller.currentCycle +  " finished with error:\n" + result));
+                Platform.runLater(() -> errorLog.setText("Cycle " + currentCycle +  " finished with error:\n" + result));
             } else {
             /*
             following code is unused.
@@ -215,41 +260,17 @@ public class CycleController {
                 long stopTime = System.currentTimeMillis();
                 final double elapsedTime = ((double)(stopTime - startTime)) / 1000;
 
-                Platform.runLater(() -> controller.errorLog.setText("Cycle " + controller.currentCycle +
+                Platform.runLater(() -> errorLog.setText("Cycle " + currentCycle +
                          " successfully ended.\n\nYour results has been put into\nlogs/" + logFileExtended + "\n\nExecution time: " + elapsedTime + " seconds"));
             }
 
-            Platform.runLater(() -> controller.currentCycle++);
+            Platform.runLater(() -> currentCycle++);
 
-            Platform.runLater(() -> controller.header.setText("Cycle " + (controller.currentCycle-1) + " finished\n" + "Please specify parameters of the " + controller.currentCycle + " cycle"));
+            Platform.runLater(() -> header.setText("Cycle " + (currentCycle-1) + " finished\n" + "Please specify parameters of the " + currentCycle + " cycle"));
 
+            Platform.runLater(() -> runCycle.setDisable(false));
+            Platform.runLater(() -> stopCycle.setDisable(true));
             return null;
-        }
-    }
-
-    class ProgressTask extends Task<Void> {
-        BufferedReader reader;
-        int numberOfSteps;
-        String line;
-        ProgressTask(BufferedReader reader, int numberOfSteps) {
-            this.reader = reader;
-            this.numberOfSteps = numberOfSteps;
-        }
-
-        @Override
-        protected Void call() throws Exception {
-            while (true) {
-                while ((line = reader.readLine()) != null) {
-                    updateMessage("Finished " + line + " steps out of " + numberOfSteps);
-                    int currentStep = Integer.parseInt(line);
-                    updateProgress(currentStep, numberOfSteps);
-                    if (currentStep == numberOfSteps) {
-                        return null;
-                    }
-                }
-
-                //Thread.sleep(200);
-            }
         }
     }
 }

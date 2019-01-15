@@ -62,7 +62,8 @@
             <Separator GridPane.rowIndex="20" GridPane.columnSpan="3" />
 
             <Button fx:id="runCycle" text="Run cycle!" GridPane.rowIndex="22" onAction="#runCycle" GridPane.columnIndex="0" />
-           <ScrollPane GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER" GridPane.rowIndex="23" GridPane.columnIndex="0" minWidth="-Infinity" >
+            <Button fx:id="stopCycle" text="Stop cycle!" GridPane.rowIndex="22" onAction="#stopCycle" GridPane.columnIndex="1" />
+            <ScrollPane GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER" GridPane.rowIndex="23" GridPane.columnIndex="0" minWidth="-Infinity" >
             <Label fx:id="errorLog" styleClass="verySmall" wrapText="true" GridPane.columnSpan="3" />
            </ScrollPane>
         </GridPane>
