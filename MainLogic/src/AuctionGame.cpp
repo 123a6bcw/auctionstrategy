@@ -5,6 +5,8 @@
  * pmove is defined inside generalStates.h
  */
 
+#include <iostream>
+
 void AuctionGame :: operator () (Player* seller_p, Player* buyer_p, size_t totalMoves, std::vector<pmove>* allMoves) {
     auto seller = dynamic_cast<Seller*>(seller_p);
     auto buyer = dynamic_cast<Buyer*>(buyer_p);

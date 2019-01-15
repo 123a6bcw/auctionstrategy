@@ -8,9 +8,13 @@
  * class for gathering statistic of game. Writes it into log file with given name
  */
 
-StatisticCounter::StatisticCounter(std::string s, size_t _ptrNumber, std::vector<std::vector<std::vector<pmove>>>* _moves, size_t _movesInGame) : ptrNumber(_ptrNumber), moves(_moves),
-  parts(std::vector<std::vector<std::vector<std::vector<pmove>>*>>(ptrNumber, std::vector<std::vector<std::vector<pmove>>*>(0,
-                                                                                                                    nullptr))), movesInGame(_movesInGame) {
+StatisticCounter::StatisticCounter(std::string s, size_t ptrNumber, std::vector<std::vector<std::vector<pmove>>>* moves, size_t movesInGame) :
+    ptrNumber(ptrNumber),
+    moves(moves),
+    parts(std::vector<std::vector<std::vector<std::vector<pmove>>*>>(ptrNumber, std::vector<std::vector<std::vector<pmove>>*>(0,
+                                                                                                                    nullptr))),
+    movesInGame(movesInGame)
+    {
     out = std::fstream();
     out.open("../logs/" + s, std::fstream::out);
     if (!out.is_open()) {
@@ -26,7 +30,6 @@ StatisticCounter::StatisticCounter(std::string s, size_t _ptrNumber, std::vector
  * with pointers to vector<vector<pmove>> aka moves[s] for s in range of this part.
  * That way we can create threads so they wouldn't had to access "moves" --- otherwise, several threads would access "moves" and, therefore, won't work in parallel
  */
-
 void StatisticCounter::createPartition() {
     size_t startSeller = 0;
     for (size_t currentPart = 0; currentPart < ptrNumber; currentPart++) {
@@ -83,7 +86,7 @@ void StatisticCounter::partedGather(const std::vector<std::vector<std::vector<pm
  * Gathering statistic from moves vector (for example, amount of accepted deals) using threads and prints it to output file
  */
 void StatisticCounter::gatherFromMoves() {
-    std::vector<std::thread> threads(0);
+    threads.clear();
     for (size_t currentPart = 0; currentPart < ptrNumber; currentPart++) {
         threads.emplace_back(std::thread(&StatisticCounter::partedGather, this, parts[currentPart]));
     }
@@ -120,10 +123,10 @@ void StatisticCounter::switchedPrint(typeOfPlayer type, std::string s1, std::str
 /*
  * collects statistic from vector of players. For instance, information about strategy usage
  */
-void StatisticCounter::gather(std::vector<Player*> players, typeOfPlayer type) {
+void StatisticCounter::gather(std::vector<Player*>* players, typeOfPlayer type) {
     std::map<std::string, size_t> countMovesStrategies; // for each strategy (name) count total moves all players use it
     std::map<std::string, std::set<Player*>> countPlayersStrategies; //get set of players who plays using this strategy.
-    for (const auto& s : players) {
+    for (const auto& s : (*players)) {
         for (const auto& str : *s->getStrategies()) {
             countMovesStrategies[str->getName()] += str->getMovesLength();
             countPlayersStrategies[str->getName()].insert(s);
@@ -147,18 +150,18 @@ void StatisticCounter::gather(std::vector<Player*> players, typeOfPlayer type) {
 /*
  * Collects overall gain of players.
  */
-void StatisticCounter::gatherGain(std::vector<Player*> players, typeOfPlayer type) {
+void StatisticCounter::gatherGain(std::vector<Player*>* players, typeOfPlayer type) {
     switchedPrint(type, "SOG", "BOG"); //sellers (buyers) overall gain
 
     long long result = 0;
-    for (const auto& x : players) {
+    for (const auto& x : (*players)) {
         result += x->getTotalGain();
     }
     out << " " << result << "\n";
 
     switchedPrint(type, "SAG", "BAG"); //sellers(buyers) average gain
-    out << " " << std::setprecision(3) << std::fixed << (static_cast<double>(result)) / players.size() << "\n";
+    out << " " << std::setprecision(3) << std::fixed << (static_cast<double>(result)) / players->size() << "\n";
 
     switchedPrint(type, "SAGPG", "BAGPG"); //sellers(buyers) average gain per game
-    out << " " << std::setprecision(3) << std::fixed << ((static_cast<double>(result)) / players.size()) / movesInGame << "\n";
+    out << " " << std::setprecision(3) << std::fixed << ((static_cast<double>(result)) / players->size()) / movesInGame << "\n";
 }

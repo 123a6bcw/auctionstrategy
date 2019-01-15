@@ -15,10 +15,10 @@
 class StatisticCounter {
 public:
     explicit StatisticCounter(std::string, size_t, std::vector<std::vector<std::vector<pmove>>>*, size_t);
-    void gather(std::vector<Player*>, typeOfPlayer); // for example, gather info of what strategies player use
+    void gather(std::vector<Player*>*, typeOfPlayer); // for example, gather info of what strategies player use
     void newStep(size_t); //initialisating statistic of new genetic cycle
     void gatherFromMoves(); // for example, amount of accepted deals
-    void gatherGain(std::vector<Player*>, typeOfPlayer);
+    void gatherGain(std::vector<Player*>*, typeOfPlayer);
     void switchedPrint(typeOfPlayer, std::string, std::string);
     ~StatisticCounter();
 private:
@@ -34,4 +34,5 @@ private:
     size_t sellersInThread; // partition. See realisation.
     int wasSold; // number of accepted deals
     size_t movesInGame;
+    std::vector<std::thread> threads; //TODO comment
 };

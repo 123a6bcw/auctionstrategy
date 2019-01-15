@@ -8,6 +8,7 @@ int main(int argc, char* argv[]) {
     
     size_t numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, scenarioNumber;
     std::string logFile;
+    size_t seed = 67; //TODO comment
     
     try {
         if (strcmp(argv[1], "-debug") == 0) {
@@ -32,7 +33,7 @@ int main(int argc, char* argv[]) {
             logFile = argv[9];
         }
 
-        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile, 8, scenarioNumber).runCycle();
+        GeneticCycle(numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, logFile, 8, scenarioNumber, seed).runCycle();
     }
 
     catch (std::invalid_argument& e) {
