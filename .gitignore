@@ -11,5 +11,4 @@ GUI/*
 !GUI.jnlp
 logs/*
 !logs
-CMakeLists.txt
 test
