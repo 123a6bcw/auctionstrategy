@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -26,8 +25,6 @@ public class CycleController {
     @FXML public Label numberOfBuyerPairingLabel;
     @FXML public Label nameOfLogFileLabel;
     @FXML public Label scenarioNumberLabel;
-    @FXML public Label progressLabel;
-    @FXML public ProgressBar progressBar;
     @FXML public Button stopCycle;
     @FXML protected Button getBack;
     @FXML protected Button runCycle;
@@ -46,9 +43,8 @@ public class CycleController {
     @FXML protected Button largeSettings;
     @FXML protected Button runLogView;
     @FXML protected Label header;
-    @FXML protected ProgressIndicator progressIndicator;
-    protected SimpleDateFormat sdf;
-    protected int currentCycle;
+    private SimpleDateFormat sdf;
+    private int currentCycle;
 
     @FXML
     protected void getOnWelcomeScreen(ActionEvent event) throws Exception {
@@ -83,7 +79,7 @@ public class CycleController {
         nameOfLogFileLabel.setTooltip(new Tooltip("Don't be scared of conflicting names - current time will be append to the name"));
         scenarioNumberLabel.setTooltip(new Tooltip("1: default scenario without anything special"));
         //progressIndicator.setProgress(5);
-        Platform.runLater(() -> stopCycle.setDisable(true)); //pressing this button before cycleThread is started causing error
+        stopCycle.setDisable(true); //pressing this button before cycleThread is started causing error
     }
 
     /*
@@ -108,7 +104,6 @@ public class CycleController {
 
     @FXML
     protected void setLargeSettings(ActionEvent event) {
-
         setSettings(50,50,50,50,5,1,1,"largeLog.txt", 1);
     }
 
@@ -122,7 +117,7 @@ public class CycleController {
     "someFileName.txt" -> ("someFileName", ".txt")
     "justFileName" (without extension) -> ("justFileName", "")
      */
-    protected Pair<String, String> getExtension(String s) {
+    private Pair<String, String> getExtension(String s) {
         int i;
         for (i = s.length() - 1; i >= 0; i--) {
             if (s.charAt(i) == '.') {
@@ -140,7 +135,7 @@ public class CycleController {
     /*
     Gets all content of some BufferedReader
      */
-    protected String getOutput(BufferedReader buffer) throws Exception {
+    private String getOutput(BufferedReader buffer) throws Exception {
         String line;
         StringBuilder sb = new StringBuilder();
         while ((line = buffer.readLine()) != null) {
@@ -152,6 +147,7 @@ public class CycleController {
 
     private Thread cycleThread; //saving this so we could safely close this thread pressing another button
     private volatile boolean exitCycle = false; // when true thread with cycle should stop
+
     /*
     runs cycle after filling all text fields with settings
      */
@@ -201,13 +197,15 @@ public class CycleController {
 
             // "filename" + ".extension" -> "filename" + "current time" + ".extension"
             Pair<String, String> extension = getExtension(logFile.getText());
-            //path to the earlier built C++ project
             String logFileExtended = extension.getKey() + sdf.format(Calendar.getInstance().getTime()) + extension.getValue();
-            //bash command to run project. Windows not supported.
+
+            //path to the earlier built C++ project
             String command = GuiMain.findFile("build/auctionGame");
+            //bash command to run project. Windows not supported.
             ProcessBuilder builder = new ProcessBuilder(command, numberOfSellers.getText(), numberOfBuyers.getText(), totalSteps.getText(),
                     movesInGame.getText(), howMuchToKill.getText(), pairSellers.getText(),
                     pairBuyers.getText(), scenarioNumber.getText(), logFileExtended);
+
             Process process = builder.start();
 
             /*
@@ -230,6 +228,12 @@ public class CycleController {
                         //someone called this cycle to stop
                         afterStop(process, logFileExtended);
                         return null;
+                    }
+
+                    if (line.equals("Error")) {
+                        //execution of cycle caused error. Breaking from cycle so error log would be printed
+                        currentStep = numberOfSteps; //cause external while to break
+                        break;
                     }
 
                     final String currentRes = "Finished " + line + " steps out of " + numberOfSteps;
@@ -265,9 +269,7 @@ public class CycleController {
             }
 
             Platform.runLater(() -> currentCycle++);
-
             Platform.runLater(() -> header.setText("Cycle " + (currentCycle-1) + " finished\n" + "Please specify parameters of the " + currentCycle + " cycle"));
-
             Platform.runLater(() -> runCycle.setDisable(false));
             Platform.runLater(() -> stopCycle.setDisable(true));
             return null;

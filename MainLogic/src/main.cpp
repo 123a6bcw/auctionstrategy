@@ -5,7 +5,7 @@
 //Input data is given through main.py, which will have some GUI
 
 int main(int argc, char* argv[]) {
-    
+    (void)argc;
     size_t numberOfSellers, numberOfBuyers, totalSteps, movesInGame, howMuchToKill, pairSellers, pairBuyers, scenarioNumber;
     std::string logFile;
     size_t seed = 67; //TODO comment
@@ -37,10 +37,12 @@ int main(int argc, char* argv[]) {
     }
 
     catch (std::invalid_argument& e) {
+        std::cout << "Error" << std::endl; //signal for progress bar to stop waiting current progress of the cycle
         std::cerr << "Error: probably wrong cycle's settings" << std::endl;
         return 1;
     }
     catch (std::runtime_error& e) {
+        std::cout << "Error" << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
     }
