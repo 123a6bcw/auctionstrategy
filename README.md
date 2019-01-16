@@ -18,5 +18,5 @@ How to build tests:
 Ubuntu:
 * Install cmake, Java and JDK
 * Install [google test](https://github.com/google/googletest)
-* run "./**buildTest**/build.sh"
+* run **sudo** "./**buildTest**/build.sh"
 * run "./buildTest/runTest"
