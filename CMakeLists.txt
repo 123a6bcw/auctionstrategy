@@ -50,20 +50,19 @@ set (SOURCES ${SOURCES} ../MainLogic/src/main.cpp)
 add_executable (auctionGame ${SOURCES})
 
 #Here goes testing using google test. For obvious reason this does not included by default
-
 #[[
 # Locate GTest
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 # Link runTests with what we want to test and the GTest and pthread library
-set (TEST_SOURCES ${TEST_SOURCES} ../test/MainLogic/GeneticCycle.cc)
-set (TEST_SOURCES ${TEST_SOURCES} ../test/MainLogic/PartedGeneticCycle.cc)
-set (TEST_SOURCES ${TEST_SOURCES} ../test/MainLogic/StatisticCollector.cc)
-set (TEST_SOURCES ${TEST_SOURCES} ../test/MainLogic/PartedStatisticCollector.cc)
-set (TEST_SOURCES ${TEST_SOURCES} ../test/MainLogic/PlayersHandler.cc)
-set (TEST_SOURCES ${TEST_SOURCES} ../test/MainLogic/AuctionGame.cc)
-set (TEST_SOURCES ${TEST_SOURCES} ../test/gtest_main.cc)
+set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/GeneticCycle.cc)
+set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/PartedGeneticCycle.cc)
+set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/StatisticCollector.cc)
+set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/PartedStatisticCollector.cc)
+set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/PlayersHandler.cc)
+set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/AuctionGame.cc)
+set (TEST_SOURCES ${TEST_SOURCES} ../tests/gtest_main.cc)
 add_executable(runTests ${TEST_SOURCES})
 target_link_libraries(runTests ${GTEST_LIBRARIES} pthread)
 #]]
