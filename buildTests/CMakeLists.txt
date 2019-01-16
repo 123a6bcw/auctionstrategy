@@ -6,10 +6,6 @@ set(CMAKE_CXX_STANDARD 11)
 # All compilations flags with warnings is in CMakeLists.txt in the root directory. CMakeLists.txt in build directory is relise version without them.
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
-# Locate GTest
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
-
 include_directories( "../BasicStrategies" )
 include_directories( "../MainLogic/include" )
 include_directories( "../Player/include" )
@@ -52,6 +48,13 @@ set (SOURCES ${SOURCES} ../MainLogic/src/PartedStatisticCollector.cpp ../MainLog
 
 set (SOURCES ${SOURCES} ../MainLogic/src/main.cpp)
 add_executable (auctionGame ${SOURCES})
+
+#Here goes testing using google test. For obvious reason this does not included by default
+
+
+# Locate GTest
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
 # Link runTests with what we want to test and the GTest and pthread library
 set (TEST_SOURCES ${TEST_SOURCES} ../test/MainLogic/GeneticCycle.cc)
