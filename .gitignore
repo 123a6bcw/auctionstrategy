@@ -3,10 +3,8 @@ cmake-build-debug/
 CMakeLists
 build/*
 !build/build.sh
-!build/CMakeLists.txt
 buildTests/*
 !buildTests/build.sh
-!buildTests/CMakeLists.txt
 GUI/*
 !GUI/src
 !GUI/GUI.html
@@ -14,4 +12,3 @@ GUI/*
 !GUI.jnlp
 logs/*
 !logs
-test
