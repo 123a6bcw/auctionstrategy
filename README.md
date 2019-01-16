@@ -15,7 +15,8 @@ Windows:
 Not supported and guaranteed to not work.  
 
 How to build tests:
-Ubuntu/MacOS:
+Ubuntu:
 * Install cmake, Java and JDK
+* Install [google test](https://github.com/google/googletest)
 * run "./**buildTest**/build.sh"
 * run "./buildTest/runTest"
