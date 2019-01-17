@@ -9,13 +9,13 @@
 
 class SBinarySearch : public SellerStrategyAbstract {
 private:
-    int inputMaxValue; //assumed maximum possible profit of buyer
-    int inputMinValue; //minimum
+    int inputMinValue; //assumed minimum possible profit of buyer
+    int inputMaxValue; //maximum
     int currentMaxValue; //calculated (assumed) possible profit of buyer
     int currentMinValue; //minimum
     explicit SBinarySearch(const SBinarySearch*);
 public:
-    SBinarySearch(Player*, size_t, size_t);
+    SBinarySearch(Player*, size_t, size_t, int, int);
     StrategyAbstract* copy(Player*) const override;
     void reset() override;
     int setPrice() override; //for comments on overrided functions see AbstractStrategy and SellerAbstractStrategy

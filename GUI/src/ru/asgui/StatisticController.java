@@ -1,6 +1,5 @@
 package ru.asgui;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,29 +8,22 @@ import javafx.stage.FileChooser;
 
 import java.io.*;
 import java.lang.*;
-import java.lang.ref.Reference;
-import java.util.Scanner;
 
 import javafx.scene.control.*;
 import javafx.util.Pair;
 
-import javax.jnlp.FileContents;
-import javax.jnlp.FileSaveService;
-
-/*
+/**
 class for converting coded statistic inside logfile to some readable information.
 TODO more statistic items? graphics?
  */
 
 public class StatisticController {
-    // @FXML private MenuItem numberOfAcceptedDeals; //unused
     @FXML private Button getBack;
     @FXML private Button runCycle;
-    //@FXML private Button basicStatisticShow; //unused
     @FXML private Label statisticLabel;
     private File logFile;
 
-    /*
+    /**
     change page to welcome page
      */
     @FXML
@@ -39,7 +31,7 @@ public class StatisticController {
         getBack.getScene().setRoot(FXMLLoader.load(getClass().getResource("Welcome.fxml")));
     }
 
-    /*
+    /**
     change page to cycle page
      */
     @FXML
@@ -47,7 +39,7 @@ public class StatisticController {
         runCycle.getScene().setRoot(FXMLLoader.load(getClass().getResource("Cycle.fxml")));
     }
 
-    /*
+    /**
     create dialog screen to choose logFile one wants to use
      */
     private void getFile() throws Exception {
@@ -57,7 +49,7 @@ public class StatisticController {
         logFile = fileChooser.showOpenDialog(getBack.getScene().getWindow());
     }
 
-    /*
+    /**
       Saves file with created statistic
      */
     @FXML
@@ -84,7 +76,7 @@ public class StatisticController {
         return reader;
     }
 
-    /*
+    /**
      each line in logfile starts with several symbols that codes what type of information is in this line.
      functions chops this code from string
      */
@@ -143,7 +135,7 @@ public class StatisticController {
         }
     }
 
-    /*
+    /**
     shows how many deals was accepted on each step of the cycle
      */
     @FXML
@@ -176,7 +168,7 @@ public class StatisticController {
     }
 
 
-    /*
+    /**
     uasge of each strategies on each step of the cycle
      */
     @FXML
@@ -229,7 +221,7 @@ public class StatisticController {
         setResult(result);
     }
 
-    /*
+    /**
     info about average total gain of sellers and buyers
      */
     @FXML

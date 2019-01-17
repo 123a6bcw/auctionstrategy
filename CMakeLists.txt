@@ -46,11 +46,11 @@ set (SOURCES ${SOURCES} ../MainLogic/src/PartedGeneticCycle.cpp ../MainLogic/inc
 set (SOURCES ${SOURCES} ../MainLogic/src/PlayersHandler.cpp ../MainLogic/include/PlayersHandler.h)
 set (SOURCES ${SOURCES} ../MainLogic/src/PartedStatisticCollector.cpp ../MainLogic/include/PartedStatisticCollector.h)
 
-set (SOURCES ${SOURCES} ../MainLogic/src/main.cpp)
-add_executable (auctionGame ${SOURCES})
+add_executable (auctionGame ${SOURCES} ../MainLogic/src/main.cpp)
 
+#Testing
 #Here goes testing using google test. For obvious reason this does not included by default
-#[[
+
 # Locate GTest
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
@@ -63,6 +63,5 @@ set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/PartedStatisticCollector.cc
 set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/PlayersHandler.cc)
 set (TEST_SOURCES ${TEST_SOURCES} ../tests/MainLogic/AuctionGame.cc)
 set (TEST_SOURCES ${TEST_SOURCES} ../tests/gtest_main.cc)
-add_executable(runTests ${TEST_SOURCES})
+add_executable(runTests ${SOURCES} ${TEST_SOURCES})
 target_link_libraries(runTests ${GTEST_LIBRARIES} pthread)
-#]]

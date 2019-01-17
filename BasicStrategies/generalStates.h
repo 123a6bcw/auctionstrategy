@@ -43,6 +43,8 @@ public:
     }
 };
 
+bool operator == (const pmove& a, const pmove& b);
+
 class RandomNumberGenerator {
 private:
     std::random_device rng;

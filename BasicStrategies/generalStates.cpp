@@ -1,5 +1,9 @@
 #include "./generalStates.h"
 
+bool operator == (const pmove& a, const pmove& b) {
+    return a.getPrice() == b.getPrice() && a.wasSold() == b.wasSold();
+}
+
 RandomNumberGenerator::RandomNumberGenerator(size_t seed) {
     urng = std::mt19937(rng());
     urng.seed(seed);

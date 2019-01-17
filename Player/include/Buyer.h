@@ -11,6 +11,7 @@ class Buyer : public Player {
 public:
     Buyer() = delete;
     Buyer(size_t, int, RandomNumberGenerator*, StrategiesController*);
+    Buyer(size_t, int, RandomNumberGenerator*, StrategiesController*, std::vector<StrategyAbstract*>*);
     bool acceptDeal(int price); //main function. Just throws this request to his current strategy and increment current move
     void addGain(int) override; // adds to his gain
     Player* copy() const override;

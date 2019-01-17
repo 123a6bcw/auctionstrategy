@@ -22,6 +22,20 @@ profit(profit)
     totalGain = 0;
 }
 
+Buyer::Buyer(size_t movesInGame, int profit, RandomNumberGenerator* randomNumberGenerator,
+        StrategiesController* controller, std::vector<StrategyAbstract*>* strategies) :
+Player(movesInGame, profit, randomNumberGenerator, controller, BUYER, strategies),
+profit(profit)
+{
+    if (movesInGame == 0) {
+        throw std::runtime_error("there cannot be zero moves in one game");
+    }
+
+    currentMove = 0;
+    currentStrategy = 0;
+    totalGain = 0;
+}
+
 Player* Buyer::copy() const {
     auto copyBuyer = new Buyer(this);
     copyBuyer -> strategies = copyStrategies(copyBuyer);

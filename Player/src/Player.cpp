@@ -37,6 +37,34 @@ type(type)
     }
 }
 
+Player::Player(size_t movesInGame, int profit, RandomNumberGenerator* randomNumberGenerator,
+               StrategiesController* controller, typeOfPlayer type, std::vector<StrategyAbstract*>* strategies):
+        randomNumberGenerator(randomNumberGenerator),
+        controller(controller),
+        movesInGame(movesInGame),
+        strategies(strategies),
+        type(type)
+{
+    for (auto& x : (*(this->strategies))) {
+        x->changeOwner(this);
+    }
+}
+
+/*
+ * If profit wasn't specified, that means this is Seller. Specifing profit does not means anything to him, so we can just assign it to 0
+ */
+Player::Player(size_t movesInGame, RandomNumberGenerator* randomNumberGenerator, StrategiesController* controller, typeOfPlayer type) :
+Player(movesInGame, 0, randomNumberGenerator, controller, type)
+{}
+
+/*
+ * same, profit wasn't specified, assign it to zero
+ */
+Player::Player(size_t movesInGame, RandomNumberGenerator* randomNumberGenerator,
+               StrategiesController* controller, typeOfPlayer type, std::vector<StrategyAbstract*>* strategies):
+Player(movesInGame, 0, randomNumberGenerator, controller, type, strategies)
+{}
+
 /*
  * increment currentMove and change currentStrategy accordingly
  */

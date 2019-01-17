@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javafx.util.Pair;
 import javafx.application.Platform;
+import org.jetbrains.annotations.Contract;
 
 import java.io.*;
 
@@ -78,11 +79,10 @@ public class CycleController {
         numberOfBuyerPairingLabel.setTooltip(new Tooltip("Don't change. Only single Pairing function implemented"));
         nameOfLogFileLabel.setTooltip(new Tooltip("Don't be scared of conflicting names - current time will be append to the name"));
         scenarioNumberLabel.setTooltip(new Tooltip("1: default scenario without anything special"));
-        //progressIndicator.setProgress(5);
         stopCycle.setDisable(true); //pressing this button before cycleThread is started causing error
     }
 
-    /*
+    /**
     Set setting of the cycle to the corresponding text fields. Helps to set common settings by pressing corresponding button.
      */
     private void setSettings(Integer numberOfSellers, Integer numberOfBuyers, Integer totalSteps, Integer movesInGame, Integer howMuchToKill, Integer pairSellers, Integer pairBuyers, String logFile, Integer scenarioNumber) {
@@ -112,7 +112,7 @@ public class CycleController {
         setSettings(100,100,100,100,10,1,1,"extraLargeLog.txt", 1);
     }
 
-    /*
+    /**
     Get last extension from the file's name.
     "someFileName.txt" -> ("someFileName", ".txt")
     "justFileName" (without extension) -> ("justFileName", "")
@@ -132,7 +132,7 @@ public class CycleController {
         return new Pair<>(s.substring(0, i), s.substring(i));
     }
 
-    /*
+    /**
     Gets all content of some BufferedReader
      */
     private String getOutput(BufferedReader buffer) throws Exception {
@@ -148,19 +148,17 @@ public class CycleController {
     private Thread cycleThread; //saving this so we could safely close this thread pressing another button
     private volatile boolean exitCycle = false; // when true thread with cycle should stop
 
-    /*
+    /**
     runs cycle after filling all text fields with settings
      */
     @FXML
-    protected void runCycle(ActionEvent event) throws Exception {
-        /*
-         Use of thread is necessity to update the progress of the process online
-          */
+    protected void runCycle(ActionEvent event) {
+        //Use of thread is necessity to update the progress of the process online
         cycleThread = new Thread(new CycleTask());
         cycleThread.start();
     }
 
-    /*
+    /**
     Go to page with viewing log file
      */
     @FXML
@@ -168,9 +166,12 @@ public class CycleController {
         runLogView.getScene().setRoot(FXMLLoader.load(getClass().getResource("Statistic.fxml")));
     }
 
+    /**
+    call executing cycle to stop
+     */
     @FXML
-    public void stopCycle(ActionEvent actionEvent) throws Exception {
-        exitCycle = true;
+    public void stopCycle(ActionEvent actionEvent) {
+        exitCycle = true; //this boolean is shared between main thread and cycle thread
         while (cycleThread.isAlive()) {
         }
         runCycle.setDisable(false);
@@ -178,8 +179,8 @@ public class CycleController {
         exitCycle = false;
     }
 
-    /*
-       Thread of running process with cycle
+    /**
+    Thread of running process with cycle
      */
     class CycleTask extends Task<Void> {
         private void afterStop(Process process, String logFile) {

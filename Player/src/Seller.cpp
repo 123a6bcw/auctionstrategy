@@ -10,10 +10,19 @@ Player(s)
 {}
 
 Seller::Seller(size_t movesInGame, RandomNumberGenerator* randomNumberGenerator, StrategiesController* controller) :
-Player(movesInGame, -1, randomNumberGenerator, controller, SELLER)
+Player(movesInGame, randomNumberGenerator, controller, SELLER)
 {
     totalGain = 0;
 }
+
+Seller::Seller(size_t movesInGame, RandomNumberGenerator* randomNumberGenerator, StrategiesController* controller, std::vector<StrategyAbstract*>* strategies) :
+Player(movesInGame, randomNumberGenerator, controller, SELLER, strategies)
+{
+    totalGain = 0;
+    currentMove = 0;
+    currentStrategy = 0;
+}
+
 
 /*
  * Main function. Just throws this request to his current strategy and increment current move

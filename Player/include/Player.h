@@ -16,7 +16,6 @@ class Player {
 public:
     RandomNumberGenerator* randomNumberGenerator;
 
-    explicit Player(size_t, int, RandomNumberGenerator*, StrategiesController*, typeOfPlayer);
     void setPreviousMoves(const std::vector<class pmove>*); // Player should know results of all previous moves in game because his strategy (may) depend on it
     static std::vector<Player*> findBestPlayers(size_t, std::vector<Player*>*); // Find players with highest gain. NOT const, sorts players (their order is not important).
     void clearGain(); // clears gain of player
@@ -30,6 +29,14 @@ public:
 
     Player() = delete;
 protected:
+    /*
+     * User should always use only either Buyer or Seller constructors
+     */
+    explicit Player(size_t, int, RandomNumberGenerator*, StrategiesController*, typeOfPlayer);
+    explicit Player(size_t, int, RandomNumberGenerator*, StrategiesController*, typeOfPlayer, std::vector<StrategyAbstract*>*);
+    explicit Player(size_t movesInGame, RandomNumberGenerator* randomNumberGenerator, StrategiesController* controller, typeOfPlayer type);
+    explicit Player(size_t, RandomNumberGenerator*, StrategiesController*, typeOfPlayer, std::vector<StrategyAbstract*>*);
+
     StrategiesController* controller;
 
     const size_t movesInGame;

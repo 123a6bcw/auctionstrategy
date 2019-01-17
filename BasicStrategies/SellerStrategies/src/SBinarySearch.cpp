@@ -8,18 +8,17 @@
 #include <iostream>
 #include "../../../Player/include/Player.h"
 
-SBinarySearch::SBinarySearch(Player* player, size_t startMove, size_t endMove):
-SellerStrategyAbstract(player, startMove, endMove)
+SBinarySearch::SBinarySearch(Player* player, size_t startMove, size_t endMove, int inputMinValue, int inputMaxValue):
+SellerStrategyAbstract(player, startMove, endMove),
+inputMinValue(inputMinValue),
+inputMaxValue(inputMaxValue)
 {
-    inputMaxValue = player -> randomNumberGenerator -> getRandomNumber(5, maxProfit);
-    inputMinValue = player -> randomNumberGenerator -> getRandomNumber(0, inputMaxValue - 2);
-    // TODO change assigning of input values?
 }
 
 SBinarySearch::SBinarySearch(const SBinarySearch* sBinarySearch):
 SellerStrategyAbstract(sBinarySearch),
-inputMaxValue(sBinarySearch -> inputMaxValue),
-inputMinValue(sBinarySearch -> inputMinValue)
+inputMinValue(sBinarySearch -> inputMinValue),
+inputMaxValue(sBinarySearch -> inputMaxValue)
 {}
 
 StrategyAbstract* SBinarySearch::copy(Player* player) const {

@@ -7,66 +7,84 @@
  */
 StrategyAbstract* StrategiesController::createSellerStrategy(size_t numberOfStrategy, Player* player, size_t startMove, size_t endMove) {
     switch (numberOfStrategy) {
-        case 1:
-            return new SBinarySearch(player, startMove, endMove);
+        case 1: {
+            int inputMaxValue = randomNumberGenerator->getRandomNumber(5, maxProfit);
+            int inputMinValue = randomNumberGenerator->getRandomNumber(0, inputMaxValue - 2);
+            return (new SBinarySearch(player, startMove, endMove, inputMinValue, inputMaxValue));
+            //TODO change assigning of input values?)
             break;
-        case 2:
-            return new SCompleteRandom(player, startMove, endMove, minProfit, maxProfit);
-        default:
-            throw(std::runtime_error("createSellerStrategy: Number of strategy is higher than amount of strategies"));
+        }
+        case 2: {
+            return (new SCompleteRandom(player, startMove, endMove, minProfit, maxProfit));
             break;
+        }
+        default: {
+            throw (std::runtime_error("createSellerStrategy: Number of strategy is higher than amount of strategies"));
+            break;
+        }
     }
 }
 
 StrategyAbstract* StrategiesController::createBuyerStrategy(size_t numberOfStrategy, Player* player, size_t startMove, size_t endMove, int profit) {
     switch (numberOfStrategy) {
-        case 1:
+        case 1: {
             return new BSimple(player, startMove, endMove, profit);
             break;
-        case 2:
+        }
+        case 2: {
             return new BCompleteRandom(player, startMove, endMove, profit);
             break;
-        case 3:
+        }
+        case 3: {
             return new BIncreaseProfit(player, startMove, endMove, profit,
-                         profit + randomNumberGenerator->getRandomNumber(minProfit, maxProfit - profit), randomNumberGenerator->getRandomNumber(0, getLength(startMove, endMove)));
+                                       profit + randomNumberGenerator->getRandomNumber(minProfit, maxProfit - profit),
+                                       randomNumberGenerator->getRandomNumber(0, getLength(startMove, endMove)));
             break;
-        default:
-            throw(std::runtime_error("createBuyerStrategy: Number of strategy is higher than amount of strategies"));
+        }
+        default: {
+            throw (std::runtime_error("createBuyerStrategy: Number of strategy is higher than amount of strategies"));
             break;
+        }
     }
 }
 
 PairingAbstract* StrategiesController::createSellerPairing(size_t numberOfPairing) {
     switch (numberOfPairing) {
-        case 1:
+        case 1: {
             return new PSimple();
             break;
-        default:
+        }
+        default: {
             throw std::runtime_error("CreateBuyerPairing: wrong number of pairing function");
+        }
     }
 }
 
 PairingAbstract* StrategiesController::createBuyerPairing(size_t numberOfPairing) {
     switch (numberOfPairing) {
-        case 1:
-            return static_cast<PairingAbstract*>(new PSimple());
+        case 1: {
+            return static_cast<PairingAbstract *>(new PSimple());
             break;
-        default:
+        }
+        default: {
             throw std::runtime_error("CreateBuyerPairing: wrong number of pairing function");
+        }
     }
 }
 
 size_t StrategiesController::getNumberOfStrategies(typeOfPlayer type) {
     switch  (type) {
-        case SELLER:
+        case SELLER: {
             return numberOfSellerStrategies;
             break;
-        case BUYER:
+        }
+        case BUYER: {
             return numberOfBuyerStrategies;
             break;
-        default:
-            throw(std::runtime_error("?? unknown type of player"));
-
+        }
+        default: {
+            throw (std::runtime_error("?? unknown type of player"));
+        }
     }
 }
 
@@ -76,14 +94,17 @@ size_t StrategiesController::getNumberOfStrategies(typeOfPlayer type) {
  */
 StrategyAbstract* StrategiesController::createStrategy(size_t numberOfStrategy, Player* player, size_t startMove, size_t endMove, int profit, typeOfPlayer type) {
     switch (type) {
-        case SELLER:
+        case SELLER: {
             return createSellerStrategy(numberOfStrategy, player, startMove, endMove);
             break;
-        case BUYER:
+        }
+        case BUYER: {
             return createBuyerStrategy(numberOfStrategy, player, startMove, endMove, profit);
             break;
-        default:
-            throw(std::runtime_error("?? unknown type of player"));
+        }
+        default: {
+            throw (std::runtime_error("?? unknown type of player"));
+        }
     }
 }
 
@@ -92,14 +113,17 @@ StrategyAbstract* StrategiesController::createStrategy(size_t numberOfStrategy, 
  */
 PairingAbstract* StrategiesController::createPairing(size_t numberOfPairing, typeOfPlayer type) {
     switch (type) {
-        case BUYER:
+        case BUYER: {
             return createBuyerPairing(numberOfPairing);
             break;
-        case SELLER:
+        }
+        case SELLER: {
             return createSellerPairing(numberOfPairing);
             break;
-        default:
+        }
+        default: {
             throw std::runtime_error("create pairing: unknown type of player");
+        }
     }
 }
 
