@@ -49,6 +49,7 @@ set (SOURCES ${SOURCES} ../MainLogic/src/PartedStatisticCollector.cpp ../MainLog
 add_executable (auctionGame ${SOURCES} ../MainLogic/src/main.cpp)
 
 #Testing
+#lol
 #Here goes testing using google test. For obvious reason this does not included by default
 
 # Locate GTest
